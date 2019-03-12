@@ -37,6 +37,12 @@ public class Person implements Serializable {
     public Person() {
     }
 
+    public Person(String email, String firstName, String lastName) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -73,16 +79,16 @@ public class Person implements Serializable {
         return phones;
     }
 
-    public void setPhones(List<Phone> phones) {
-        this.phones = phones;
+    public void addPhoneNumber(Phone phoneNumber) {
+        this.phones.add(phoneNumber);
     }
 
     public List<Hobby> getHobbies() {
         return hobbies;
     }
 
-    public void setHobbies(List<Hobby> hobbies) {
-        this.hobbies = hobbies;
+    public void addHobbies(Hobby hobbies) {
+        this.hobbies.add(hobbies);
     }
 
 }

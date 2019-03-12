@@ -35,6 +35,11 @@ public class City implements Serializable {
     public City() {
     }
 
+    public City(int zipCode, String city) {
+        this.zipCode = zipCode;
+        this.city = city;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -55,7 +60,7 @@ public class City implements Serializable {
         return city;
     }
 
-    public void setCity(String city) {
+    public void addCity(String city) {
         this.city = city;
     }
 

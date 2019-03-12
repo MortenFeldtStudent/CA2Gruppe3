@@ -29,6 +29,9 @@ public interface IPersonFacade {
     // Get a list of all zip codes in Denmark
     public List<Person> getAllZipFromCountry(int zipCode);
     
+    // Get Person By Id
+    public Person getPersonByID(int personId);
+    
     
     
 }

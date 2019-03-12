@@ -30,12 +30,41 @@ public class Phone implements Serializable {
     public Phone() {
     }
 
+    public Phone(int number, String description) {
+        this.number = number;
+        this.description = description;
+    }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void addPerson(Person person) {
+        this.person = person;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void addDescription(String description) {
+        this.description = description;
     }
 
 }
