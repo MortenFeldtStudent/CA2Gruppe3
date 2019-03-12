@@ -11,6 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+/**
+ *
+ * @author Morten
+ * @author Jörg
+ */
 @Entity
 public class Hobby implements Serializable {
 

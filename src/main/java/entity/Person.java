@@ -11,6 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+/**
+ *
+ * @author Morten
+ * @author Jörg
+ */
 @Entity
 public class Person implements Serializable {
 
