@@ -2,7 +2,10 @@ package facade;
 
 import entity.Person;
 import java.util.List;
-
+/**
+ * 
+ * @author jörg
+ */
 public class PersonFacade implements interfaces.IPersonFacade{
 
     @Override
