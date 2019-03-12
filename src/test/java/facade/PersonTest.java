@@ -4,9 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class FacadeTest {
+public class PersonTest {
     
-    public FacadeTest() {
+    public PersonTest() {
     }
     
     @Before
