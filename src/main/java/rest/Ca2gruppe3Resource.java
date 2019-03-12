@@ -29,7 +29,7 @@ public class Ca2gruppe3Resource {
     @Path("/test")
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
-        return "TEST";
+        return "TEST Joerg Hallo";
     }
 
     /**
