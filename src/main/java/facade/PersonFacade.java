@@ -1,6 +1,10 @@
 package facade;
 
 import dto.PersonDTO;
+import entity.Address;
+import entity.City;
+import entity.Person;
+import entity.Phone;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -17,6 +21,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
     public PersonFacade(EntityManagerFactory emf) {
         this.emf = emf;
     }
+
 
     @Override
     public PersonDTO getInfoFromPersonByPhoneNumber(int phoneNumber) {
@@ -65,6 +70,14 @@ public class PersonFacade implements interfaces.IPersonFacade {
         Query query = em.createQuery("SELECT NEW dto.Person FROM Person p WHERE p.id = :id");
         query.setParameter("id", personId);
         return (PersonDTO) query.getSingleResult();
+    }
+
+    public PersonDTO postPersonWithAddressAndPhone(Person person, Phone phone, Address address, City city) {
+        EntityManager em = emf.createEntityManager();
+        
+        person.addPhone(phone);
+        return null;
+        
     }
 
 }
