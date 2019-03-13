@@ -32,6 +32,11 @@ public class Address implements Serializable {
     @JoinColumn(name = "FK_Address")
     private List<Person> persons = new ArrayList();
 
+    public Address(String street, String info) {
+        this.street = street;
+        this.info = info;
+    }
+
 
     public Address() {
     }
