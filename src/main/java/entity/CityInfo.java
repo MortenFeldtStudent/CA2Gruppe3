@@ -18,24 +18,24 @@ import javax.persistence.OneToMany;
  * @author Jörg
  */
 @Entity
-public class City implements Serializable {
+public class CityInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
-    private int zipCode;
+    private String zipCode;
     @Column(nullable = false)
     private String city;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "FK_City")
     private final List<Address> adresses = new ArrayList();
 
-    public City() {
+    public CityInfo() {
     }
 
-    public City(int zipCode, String city) {
+    public CityInfo(String zipCode, String city) {
         this.zipCode = zipCode;
         this.city = city;
     }
@@ -48,11 +48,11 @@ public class City implements Serializable {
         this.id = id;
     }
 
-    public int getZipCode() {
+    public String getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(int zipCode) {
+    public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
 
