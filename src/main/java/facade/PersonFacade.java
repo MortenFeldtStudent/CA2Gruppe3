@@ -81,7 +81,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         address.setCity(city);
         person.addPhone(phone);
         person.addAddress(address);
-
+        
         try {
             em.getTransaction().begin();
             em.merge(person);
@@ -89,7 +89,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         } finally {
             em.close();
         }
-        return null;
+        return new PersonDTO(person);
     }
 
     public List<PersonDTO> getAllPersonsAndInfo(){

@@ -98,7 +98,7 @@ public class Ca2gruppe3Resource {
         CityInfo city = new CityInfo(zipcode, cityname);
 
         PersonDTO person = pf.postPersonWithAddressAndPhone(gson.fromJson(content, Person.class), phone, address, city);
-        return null;
+        return Response.ok().entity(gson.toJson(person)).build();
     }
 
 }
