@@ -32,6 +32,7 @@ public interface IPersonFacade {
     // Get Person By Id
     public PersonDTO getPersonByID(int personId);
     
-    
+    // Get all persons and information
+    public List<PersonDTO> getAllPersonsAndInfo();
     
 }

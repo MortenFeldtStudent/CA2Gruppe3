@@ -22,7 +22,10 @@ public class PersonFacade implements interfaces.IPersonFacade {
         this.emf = emf;
     }
 
-
+    public PersonFacade() {
+    }
+    
+ 
     @Override
     public PersonDTO getInfoFromPersonByPhoneNumber(int phoneNumber) {
         EntityManager em = emf.createEntityManager();
@@ -43,7 +46,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
     @Override
     public List<PersonDTO> getAllPersonsByCity(String cityName) {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p JOIN p.  dto.CityDTO WHERE c.city = :city");
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p JOIN p.dto.CityDTO WHERE c.city = :city");
         return query.setParameter("city", cityName).getResultList();
 
     }
@@ -78,7 +81,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         address.setCity(city);
         person.addPhone(phone);
         person.addAddress(address);
-
+        
         try {
             em.getTransaction().begin();
             em.merge(person);
@@ -86,7 +89,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         } finally {
             em.close();
         }
-        return null;
+        return new PersonDTO(person);
     }
 
     public List<PersonDTO> getAllPersonsAndInfo(){
@@ -95,4 +98,20 @@ public class PersonFacade implements interfaces.IPersonFacade {
         List<PersonDTO> list = query.getResultList();
         return list;
     }
+    
+    public List<PersonDTO> getAllPersonsContactInfo(){
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p.id, p.email, p.firstName, p.lastName, p.address, p.phones) FROM Person p");
+        List<PersonDTO> list = query.getResultList();
+        return list;
+    }
+
+    public static void main(String[] args) {
+        PersonFacade pf = new PersonFacade();
+        
+        List<PersonDTO> persons = pf.getAllPersonsContactInfo();
+        System.out.println(persons);
+    }
+
 }
+

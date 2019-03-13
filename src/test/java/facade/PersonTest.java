@@ -104,6 +104,7 @@ public class PersonTest  {
 //            person2.setHobbies(hobby3);
 //            person4.setHobbies(hobby3);
 //            // Add Hobbies to Person
+<<<<<<< HEAD
 //            hobby1.addPersons(person1);
 //            hobby2.addPersons(person1);
 //            hobby3.addPersons(person3);
@@ -191,3 +192,89 @@ public class PersonTest  {
 //    }
 //
 //}
+=======
+            hobby1.addPersons(person1);
+            hobby2.addPersons(person1);
+            hobby3.addPersons(person3);
+            hobby3.addPersons(person2);
+            hobby3.addPersons(person4);
+
+            em.getTransaction().commit();
+
+        } finally {
+            em.close();
+        }
+
+    }
+
+    @Test
+    @Override
+    public void getInfoFromPersonByPhoneNumberTest() {
+        // Arrange
+        PersonDTO p = facade.getInfoFromPersonByPhoneNumber(phoneList.get(1).getNumber());
+        System.out.println(p);
+        // Act
+        String expected = phoneList.get(1).getPerson().getEmail();
+        String actual = p.getEmail();
+        // Assert
+        Assert.assertEquals(expected.toLowerCase(), actual);
+
+    }
+
+    @Test
+    @Override
+    public void getAllPersonsByHobbyTest() {
+        // Arrange
+        String hobby = "running";
+        List<PersonDTO> personDTOList = facade.getAllPersonsByHobby(hobby.toLowerCase());
+        // Act
+        int actual = personDTOList.size();
+        int expectual = 3;
+        // Assert
+        Assert.assertEquals(expectual, actual);
+    }
+
+    @Test
+    @Override
+    public void getAllPersonsByCityTest() {
+        // Arrange
+        String cityName = cityList.get(0).getCity();
+        // Act
+        // Assert
+
+    }
+
+    @Test
+    @Override
+    public void getCountOfPeopleWithGivenHobbyTest() {
+        // Arrange
+        // Act
+        // Assert
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Test
+    @Override
+    public void getAllZipFromCountryTest() {
+        // Arrange
+        // Act
+        // Assert
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Test
+    @Override
+    public void getPersonByIDTest() {
+        // Arrange
+        // Act
+        // Assert
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void getAllPersonsAndInfoTest() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+}
+>>>>>>> 67afa1c42d9073e8b4f4ed40ff3f7f0e9a6e6355
