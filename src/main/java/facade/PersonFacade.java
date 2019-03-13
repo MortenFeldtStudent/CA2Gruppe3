@@ -28,9 +28,9 @@ public class PersonFacade implements interfaces.IPersonFacade {
     @Override
     public List<PersonDTO> getAllPersonsByHobby(String hobby) {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT NEW dto.PersonDTO FROM Hobby h ORDER BY h.name ASC");
-
-        List<PersonDTO> list = (List<PersonDTO>) query.getResultList();
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO FROM Hobby h WHERE h.name = :name ORDER BY h.name ASC");
+        query.setParameter("name", hobby);
+        List<PersonDTO> list = query.getResultList();
 
         return list;
     }
@@ -38,24 +38,33 @@ public class PersonFacade implements interfaces.IPersonFacade {
     @Override
     public PersonDTO getPersonByCity(String cityName) {
         EntityManager em = emf.createEntityManager();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO FROM CityInfo c WHERE c.city = :city");
+        return (PersonDTO) query.setParameter("city", cityName).getSingleResult();
+         
     }
 
     @Override
     public long getCountOfPeopleWithGivenHobby(String hobby) {
         EntityManager em = emf.createEntityManager();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query query = em.createQuery("SELECT COUNT(p.id) FROM Person p JOIN Hobby h WHERE h.name = :name");
+        query.setParameter("name", hobby);
+        long count = (long) query.getSingleResult();
+        return count;
     }
 
     @Override
     public List<PersonDTO> getAllZipFromCountry(int zipCode) {
         EntityManager em = emf.createEntityManager();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query query = em.createQuery("SELECT c.ZipCode FROM CityInfo c");
+        return query.getResultList();
     }
 
     @Override
     public PersonDTO getPersonByID(int personId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createQuery("SELECT NEW dto.Person FROM Person p WHERE p.id = :id");
+        query.setParameter("id", personId);
+        return (PersonDTO) query.getSingleResult();
     }
 
 }
