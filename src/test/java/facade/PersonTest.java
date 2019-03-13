@@ -21,14 +21,24 @@ public class PersonTest implements interfaces.IPersonTestFacade {
 
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu-test", null);
     private static PersonFacade facade = new PersonFacade(emf);
-
+    // Create Lists  for testing
     List<Person> personList = new ArrayList<>();
     List<Hobby> hobbyList = new ArrayList<>();
-
+    List<Phone> phoneList = new ArrayList<>();
+    // Create Test Persons entities   
     Person person1 = new Person("oertel@gmail.com", "Jörg", "Oertel");
     Person person2 = new Person("porse@gmail.com", "Rasmus", "Porse");
     Person person3 = new Person("rojahn@gmail.com", "Nikolai", "Rojahn");
     Person person4 = new Person("feldt@gmail.com", "Morten", "Feldt");
+    // Create Test Phone entities
+    Phone phone1 = new Phone(12345, "Home");
+    Phone phone2 = new Phone(56789, "Privat");
+    Phone phone3 = new Phone(74125, "Mobil");
+    Phone phone4 = new Phone(89632, "Landline");
+    // Create Test Hobby entities
+    Hobby hobby1 = new Hobby("football", "VFB Stuttgart");
+    Hobby hobby2 = new Hobby("boardgames", "Cafe Bastard");
+    Hobby hobby3 = new Hobby("running", "Copenhagen Marathon");
 
     public PersonTest() {
         personList.add(person1);
@@ -36,7 +46,15 @@ public class PersonTest implements interfaces.IPersonTestFacade {
         personList.add(person3);
         personList.add(person4);
         //
-        
+        phoneList.add(phone1);
+        phoneList.add(phone2);
+        phoneList.add(phone3);
+        phoneList.add(phone4);
+        //
+        hobbyList.add(hobby1);
+        hobbyList.add(hobby2);
+        hobbyList.add(hobby3);
+
     }
 
     @Before
@@ -47,20 +65,11 @@ public class PersonTest implements interfaces.IPersonTestFacade {
             // Start Transaction
             em.getTransaction().begin();
             //
-            em.createQuery("delete from Hobby").executeUpdate();
+//            em.createQuery("delete from Hobby").executeUpdate();
             em.createQuery("delete from Hobby").executeUpdate();
             em.createQuery("delete from Phone").executeUpdate();
             em.createQuery("delete from Person").executeUpdate();
-            // Create Test Person entities
-            // Create Test Phone entities
-            Phone phone1 = new Phone(12345, "Home");
-            Phone phone2 = new Phone(56789, "Privat");
-            Phone phone3 = new Phone(74125, "Mobil");
-            Phone phone4 = new Phone(89632, "Landline");
-            // Create Test Hobby entities
-            Hobby hobby1 = new Hobby("football", "VFB Stuttgart");
-            Hobby hobby2 = new Hobby("boardgames", "Cafe Bastard");
-            Hobby hobby3 = new Hobby("running", "Copenhagen Marathon");
+
             // Add Person to Phone
             phone1.addPerson(person1);
             phone2.addPerson(person2);
@@ -77,7 +86,7 @@ public class PersonTest implements interfaces.IPersonTestFacade {
 //            person3.addHobbies(hobby3);
 //            person2.addHobbies(hobby3);
 //            person4.addHobbies(hobby3);
-//            // Add Hobbies to Person
+////            // Add Hobbies to Person
 //            hobby1.addPersons(person1);
 //            hobby2.addPersons(person1);
 //            hobby3.addPersons(person3);
@@ -111,11 +120,11 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     @Override
     public void getInfoFromPersonByPhoneNumberTest() {
         // Arrange
-        PersonDTO p = facade.getInfoFromPersonByPhoneNumber(12345);
+        PersonDTO p = facade.getInfoFromPersonByPhoneNumber(phoneList.get(1).getNumber());
         System.out.println(p);
         // Act
-        String expected = "Oertel";
-        String actual = p.getLastName().toLowerCase();
+        String expected = phoneList.get(1).getPerson().getEmail();
+        String actual = p.getEmail();
         // Assert
         Assert.assertEquals(expected.toLowerCase(), actual);
 
@@ -124,12 +133,14 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     @Test
     @Override
     public void getAllPersonsByHobbyTest() {
-        // Arrange
-        String hobby = "football";
-        List<PersonDTO> personDTOList = facade.getAllPersonsByHobby(hobby.toLowerCase());
-        // Act
+//        // Arrange
+//        String hobby = "football";
+//        List<PersonDTO> personDTOList = facade.getAllPersonsByHobby(hobby.toLowerCase());
+//        // Act
+//
+//        // Assert
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
-        // Assert
     }
 
     @Test
