@@ -2,6 +2,7 @@ package facade;
 
 import dto.PersonDTO;
 import entity.Address;
+import entity.CityInfo;
 import entity.Person;
 import entity.Phone;
 import java.util.List;
@@ -20,7 +21,6 @@ public class PersonFacade implements interfaces.IPersonFacade {
     public PersonFacade(EntityManagerFactory emf) {
         this.emf = emf;
     }
-
 
     @Override
     public PersonDTO getInfoFromPersonByPhoneNumber(int phoneNumber) {
@@ -43,8 +43,8 @@ public class PersonFacade implements interfaces.IPersonFacade {
     public List<PersonDTO> getAllPersonsByCity(String cityName) {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p JOIN p.  dto.CityDTO WHERE c.city = :city");
-        return  query.setParameter("city", cityName).getResultList();
-         
+        return query.setParameter("city", cityName).getResultList();
+
     }
 
     @Override
@@ -73,10 +73,19 @@ public class PersonFacade implements interfaces.IPersonFacade {
 
     public PersonDTO postPersonWithAddressAndPhone(Person person, Phone phone, Address address, CityInfo city) {
         EntityManager em = emf.createEntityManager();
-        
+
+        address.setCity(city);
         person.addPhone(phone);
+        person.addAddress(address);
+
+        try {
+            em.getTransaction().begin();
+            em.merge(person);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
         return null;
-        
     }
 
 }

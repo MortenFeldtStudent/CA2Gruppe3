@@ -96,6 +96,10 @@ public class Person implements Serializable {
         phone.setPerson(this);
     }
 
+    public void addAddress(Address address) {
+        this.addAddress(address);
+    }
+
     public List<Phone> getPhones() {
         return phones;
     }

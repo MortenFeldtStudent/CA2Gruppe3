@@ -27,15 +27,14 @@ public class Address implements Serializable {
     @Column(nullable = false)
     private String info;
 
-    public Address(String street, String info) {
-        this.street = street;
-        this.info = info;
-    }
-
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "FK_City")
     private CityInfo city;
 
+    public Address(String street, String info) {
+        this.street = street;
+        this.info = info;
+    }
     public Address() {
     }
 

@@ -3,7 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import dto.PersonDTO;
 import entity.Address;
-import entity.City;
+import entity.CityInfo;
 import entity.Person;
 import entity.Phone;
 import facade.PersonFacade;
@@ -67,12 +67,12 @@ public class Ca2gruppe3Resource {
             @QueryParam("pdescription") String pdescription,
             @QueryParam("street") String street,
             @QueryParam("sinfo") String sinfo,
-            @QueryParam("zipcode") int zipcode,
+            @QueryParam("zipcode") String zipcode,
             @QueryParam("city") String cityname) {
 
         Phone phone = new Phone(phonenumber, pdescription);
         Address address = new Address(street, sinfo);
-        City city = new City(zipcode, cityname);
+        CityInfo city = new CityInfo(zipcode, cityname);
 
         PersonDTO person = pf.postPersonWithAddressAndPhone(gson.fromJson(content, Person.class), phone, address, city);
         return null;
