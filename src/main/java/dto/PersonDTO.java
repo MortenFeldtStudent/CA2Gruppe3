@@ -1,17 +1,13 @@
 package dto;
 
 import entity.Address;
-import entity.Hobby;
 import entity.Person;
 import entity.Phone;
-import facade.PersonFacade;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PersonDTO {
 
-    PersonFacade pf = new PersonFacade();
-    
     private Integer id;
     private String email;
     private String firstName;
@@ -19,7 +15,6 @@ public class PersonDTO {
     private Address address;
 
     private List<PhoneDTO> phoneList;
-    private List<HobbyDTO> hobbies;
 
     public PersonDTO(Person person) {
         this.id = person.getId();
@@ -28,10 +23,9 @@ public class PersonDTO {
         this.lastName = person.getLastName();
         this.phoneList = convertPhone(person.getPhones());
         this.address = person.getAddress();
-        this.hobbies = convertHobby(person.getHobbies());
     }
-    
-        public PersonDTO(int id, String email, String firstName, String lastName, Object phones, Address address) {
+
+    public PersonDTO(int id, String email, String firstName, String lastName, Phone phones, Address address) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -39,21 +33,13 @@ public class PersonDTO {
         this.phoneList = convertPhone((List<Phone>) phones);
         this.address = address;
     }
-        
-    public List<PhoneDTO> convertPhone(List <Phone> phones) {
+
+    public List<PhoneDTO> convertPhone(List<Phone> phones) {
         List<PhoneDTO> phoneDTOList = new ArrayList<>();
         for (Phone phone : phones) {
             phoneDTOList.add(new PhoneDTO(phone));
         }
         return phoneDTOList;
-    }
-
-    public List<HobbyDTO> convertHobby(List <Hobby> hobbies) {
-        List<HobbyDTO> hobbiesList = new ArrayList<>();
-        for (Hobby hobby : hobbies) {
-            hobbiesList.add(new HobbyDTO(hobby));
-        }
-        return hobbiesList;
     }
 
     public Integer getId() {
@@ -111,6 +97,19 @@ public class PersonDTO {
         personDTO = personDTO.replace("@2", this.firstName);
         personDTO = personDTO.replace("@3", this.lastName);
         personDTO = personDTO.replace("@4", this.email);
+        return personDTO;
+    }
+    
+    public String toStringAll() {
+        String personDTO = "@1: @2 @3 @4 @5 @6 @7 @8";
+        personDTO = personDTO.replace("@1", String.valueOf(this.id));
+        personDTO = personDTO.replace("@2", this.firstName);
+        personDTO = personDTO.replace("@3", this.lastName);
+        personDTO = personDTO.replace("@4", this.email);
+        personDTO = personDTO.replace("@5", this.address.getStreet());
+        personDTO = personDTO.replace("@6", this.address.getInfo());
+        personDTO = personDTO.replace("@7", this.address.getCity().getZipCode());
+        personDTO = personDTO.replace("@8", this.address.getCity().getCity());
         return personDTO;
     }
 

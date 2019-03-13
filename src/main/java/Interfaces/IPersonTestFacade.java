@@ -5,6 +5,12 @@
  */
 package interfaces;
 
+import dto.PersonDTO;
+import entity.Address;
+import entity.CityInfo;
+import entity.Person;
+import entity.Phone;
+
 /**
  *
  * @author jörg
@@ -24,12 +30,15 @@ public interface IPersonTestFacade {
     public void getCountOfPeopleWithGivenHobbyTest();
 
     // Get a list of all zip codes in Denmark
-    public void getAllZipFromCountryTest();
+    public void getAllZipCodesTest();
 
     // Get a Person by Id
     public void getPersonByIDTest();
     
      // Get all persons and information
     public void getAllPersonsAndInfoTest();
+    
+    // Post a Person with Addresss and Phone
+    public void postPersonWithAddressAndPhone();
 
 }

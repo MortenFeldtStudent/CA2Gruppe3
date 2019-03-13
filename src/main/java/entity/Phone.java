@@ -26,7 +26,7 @@ public class Phone implements Serializable {
     @Column(nullable = false)
     private String description;
     //
-    @ManyToOne(optional = false,cascade = {CascadeType.MERGE, CascadeType.MERGE})
+    @ManyToOne(optional = false)
     private Person person;
 
     public Phone() {

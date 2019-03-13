@@ -24,8 +24,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
 
     public PersonFacade() {
     }
-    
- 
+
     @Override
     public PersonDTO getInfoFromPersonByPhoneNumber(int phoneNumber) {
         EntityManager em = emf.createEntityManager();
@@ -46,7 +45,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
     @Override
     public List<PersonDTO> getAllPersonsByCity(String cityName) {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p JOIN p.dto.CityDTO WHERE c.city = :city");
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p JOIN p.address ad WHERE ad.city.city = :city");
         return query.setParameter("city", cityName).getResultList();
 
     }
@@ -54,34 +53,42 @@ public class PersonFacade implements interfaces.IPersonFacade {
     @Override
     public long getCountOfPeopleWithGivenHobby(String hobby) {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT COUNT(p.id) FROM Person p JOIN Hobby h WHERE h.name = :name");
+        Query query = em.createQuery("SELECT COUNT(p.id) FROM Person p JOIN p.hobbies hb WHERE hb.name = :name");
         query.setParameter("name", hobby);
         long count = (long) query.getSingleResult();
         return count;
     }
 
     @Override
-    public List<PersonDTO> getAllZipFromCountry(int zipCode) {
+    public List<String> getAllZipCodes() {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT c.ZipCode FROM CityInfo c");
+        Query query = em.createQuery("SELECT c.zipCode  FROM CityInfo c");
         return query.getResultList();
     }
 
     @Override
     public PersonDTO getPersonByID(int personId) {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT NEW dto.Person FROM Person p WHERE p.id = :id");
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p WHERE p.id = :id");
         query.setParameter("id", personId);
         return (PersonDTO) query.getSingleResult();
     }
 
+    @Override
+    public List<PersonDTO> getAllPersonsAndInfo() {
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p");
+        List<PersonDTO> list = query.getResultList();
+        return list;
+    }
+
+    @Override
     public PersonDTO postPersonWithAddressAndPhone(Person person, Phone phone, Address address, CityInfo city) {
         EntityManager em = emf.createEntityManager();
-
         address.setCity(city);
         person.addPhone(phone);
         person.setAddress(address);
-        
+
         try {
             em.getTransaction().begin();
             em.merge(person);
@@ -92,26 +99,11 @@ public class PersonFacade implements interfaces.IPersonFacade {
         return new PersonDTO(person);
     }
 
-    public List<PersonDTO> getAllPersonsAndInfo(){
-        EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p");
-        List<PersonDTO> list = query.getResultList();
-        return list;
-    }
-    
-    public List<PersonDTO> getAllPersonsContactInfo(){
-        EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p.id, p.email, p.firstName, p.lastName, p.address, p.phones) FROM Person p");
-        List<PersonDTO> list = query.getResultList();
-        return list;
-    }
-
-    public static void main(String[] args) {
-        PersonFacade pf = new PersonFacade();
-        
-        List<PersonDTO> persons = pf.getAllPersonsContactInfo();
-        System.out.println(persons);
-    }
-
+    /// We allready have that method !!!!!!!!!!!!!!!!!!?????????????????????
+//    public List<PersonDTO> getAllPersonsContactInfo() {
+//        EntityManager em = emf.createEntityManager();
+//        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p.id, p.email, p.firstName, p.lastName, p.address, p.phones) FROM Person p");
+//        List<PersonDTO> list = query.getResultList();
+//        return list;
+//    }
 }
-

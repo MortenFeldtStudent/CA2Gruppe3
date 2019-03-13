@@ -1,16 +1,11 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 
 /**
  *
@@ -28,9 +23,6 @@ public class CityInfo implements Serializable {
     private String zipCode;
     @Column(nullable = false)
     private String city;
-//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @JoinColumn(name = "FK_City")
-//    private final List<Address> adresses = new ArrayList();
 
     public CityInfo() {
     }
