@@ -6,6 +6,7 @@
 package dto;
 
 import entity.Address;
+import entity.CityInfo;
 
 /**
  *
@@ -16,12 +17,45 @@ public class AddressDTO {
     private int id;
     private String street;
     private String info;
-    private CityDTO cityDto;
+    private CityInfo cityInfo;
 
     public AddressDTO(Address address) {
         this.id = address.getId();
         this.street = address.getStreet();
         this.info = address.getInfo();
+        this.cityInfo = address.getCity();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public CityInfo getCityInfo() {
+        return cityInfo;
+    }
+
+    public void setCityInfo(CityInfo cityInfo) {
+        this.cityInfo = cityInfo;
     }
 
 }

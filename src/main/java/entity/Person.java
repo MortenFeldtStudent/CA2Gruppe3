@@ -37,7 +37,7 @@ public class Person implements Serializable {
     //
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Hobby> hobbies;
-    
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "FK_Address")
     private Address address;
@@ -49,6 +49,14 @@ public class Person implements Serializable {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public Integer getId() {
@@ -82,10 +90,14 @@ public class Person implements Serializable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
-    public void addPhone(Phone phone){
+
+    public void addPhone(Phone phone) {
         phones.add(phone);
         phone.setPerson(this);
+    }
+
+    public void addAddress(Address address) {
+        this.addAddress(address);
     }
 
     public List<Phone> getPhones() {
@@ -104,7 +116,4 @@ public class Person implements Serializable {
         this.hobbies.add(hobbies);
     }
 
-    
-
-    
 }
