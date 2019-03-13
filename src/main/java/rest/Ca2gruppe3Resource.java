@@ -79,7 +79,8 @@ public class Ca2gruppe3Resource {
     @Path("/person/contactinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsContactInfo(){
-        return
+        return null;
+        
     }
 
     @POST

@@ -13,7 +13,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.xml.transform.Source;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -139,6 +138,11 @@ public class PersonTestNew implements interfaces.IPersonTestFacade {
 
     @Override
     public void getPersonByIDTest() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void getAllPersonsAndInfoTest() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
