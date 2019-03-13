@@ -80,7 +80,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
 
         address.setCity(city);
         person.addPhone(phone);
-        person.addAddress(address);
+        person.setAddress(address);
         
         try {
             em.getTransaction().begin();

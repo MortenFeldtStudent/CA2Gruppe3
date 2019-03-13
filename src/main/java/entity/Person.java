@@ -96,8 +96,9 @@ public class Person implements Serializable {
         phone.setPerson(this);
     }
 
-    public void addAddress(Address address) {
-        this.addAddress(address);
+    public void addHobby(Hobby hobby) {
+        hobbies.add(hobby);
+        hobby.setPerson(this);
     }
 
     public List<Phone> getPhones() {
@@ -114,6 +115,17 @@ public class Person implements Serializable {
 
     public void setHobbies(Hobby hobbies) {
         this.hobbies.add(hobbies);
+    }
+    
+    
+     @Override
+    public String toString() {
+        String person = "@1: @2 @3 @4";
+        person = person.replace("@1", String.valueOf(this.id));
+        person = person.replace("@2", this.firstName);
+        person = person.replace("@3", this.lastName);
+        person = person.replace("@4", this.email);
+        return person;
     }
 
 }
