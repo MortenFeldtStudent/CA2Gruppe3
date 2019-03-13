@@ -29,6 +29,7 @@ public class Address implements Serializable {
     private String street;
     @Column(nullable = false)
     private String info;
+    
     public Address(String street, String info) {
         this.street = street;
         this.info = info;

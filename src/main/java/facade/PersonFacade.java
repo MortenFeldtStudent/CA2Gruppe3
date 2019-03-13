@@ -2,7 +2,7 @@ package facade;
 
 import dto.PersonDTO;
 import entity.Address;
-import entity.City;
+import entity.CityInfo;
 import entity.Person;
 import entity.Phone;
 import java.util.List;
@@ -72,12 +72,22 @@ public class PersonFacade implements interfaces.IPersonFacade {
         return (PersonDTO) query.getSingleResult();
     }
 
-    public PersonDTO postPersonWithAddressAndPhone(Person person, Phone phone, Address address, City city) {
+    public PersonDTO postPersonWithAddressAndPhone(Person person, Phone phone, Address address, CityInfo city) {
         EntityManager em = emf.createEntityManager();
         
+        address.setCity(city);
         person.addPhone(phone);
-        return null;
+        person.addAddress(address);
         
+        
+        try {
+            em.getTransaction().begin();
+            em.merge(person);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return null;  
     }
 
 }
