@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,9 +30,11 @@ public class Person implements Serializable {
     private String firstName;
     @Column(nullable = false)
     private String lastName;
-    @OneToMany(mappedBy = "person")
+    //
+    @OneToMany(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Phone> phones;
-    @ManyToMany(cascade = CascadeType.ALL)
+    //
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Hobby> hobbies;
 
     public Person() {

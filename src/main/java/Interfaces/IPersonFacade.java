@@ -5,7 +5,7 @@
  */
 package interfaces;
 
-import entity.Person;
+import dto.PersonDTO;
 import java.util.List;
 
 /**
@@ -15,22 +15,22 @@ import java.util.List;
 public interface IPersonFacade {
 
     //Get information about a person (address, hobbies etc) given a phone number.
-    public Person getInfoFromPersonByPhoneNumber(int phoneNumber);
+    public PersonDTO getInfoFromPersonByPhoneNumber(int phoneNumber);
     
     //Get all persons with a given hobby
-    public List<Person> getAllPersonsByHobby(String hobby);
+    public List<PersonDTO> getAllPersonsByHobby(String hobby);
     
     //Get all persons living in a given city
-    public Person getPersonByCity(String cityName);
+    public PersonDTO getPersonByCity(String cityName);
     
     //Get the count of people with a given hobby
     public long getCountOfPeopleWithGivenHobby(String hobby);
     
     // Get a list of all zip codes in Denmark
-    public List<Person> getAllZipFromCountry(int zipCode);
+    public List<PersonDTO> getAllZipFromCountry(int zipCode);
     
     // Get Person By Id
-    public Person getPersonByID(int personId);
+    public PersonDTO getPersonByID(int personId);
     
     
     

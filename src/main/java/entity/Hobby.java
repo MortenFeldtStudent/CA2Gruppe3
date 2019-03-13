@@ -27,7 +27,8 @@ public class Hobby implements Serializable {
     private String name;
     @Column(nullable = false)
     private String description;
-    @ManyToMany(mappedBy = "hobbies", cascade = CascadeType.ALL)
+    //
+    @ManyToMany(mappedBy = "hobbies", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     List<Person> persons = new ArrayList();
 
     public Hobby() {
@@ -66,8 +67,8 @@ public class Hobby implements Serializable {
         return persons;
     }
 
-    public void setPersons(List<Person> persons) {
-        this.persons = persons;
+    public void addPersons(Person person) {
+        this.persons.add(person);
     }
-
+    
 }

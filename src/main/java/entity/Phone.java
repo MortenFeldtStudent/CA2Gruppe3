@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +25,8 @@ public class Phone implements Serializable {
     private int number;
     @Column(nullable = false)
     private String description;
-    @ManyToOne(optional = false)
+    //
+    @ManyToOne(optional = false,cascade = {CascadeType.MERGE, CascadeType.MERGE})
     private Person person;
 
     public Phone() {

@@ -30,7 +30,8 @@ public class Address implements Serializable {
     private String info;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "FK_Address")
-    private final List<Person> persons = new ArrayList();
+    private List<Person> persons = new ArrayList();
+
 
     public Address() {
     }
@@ -59,4 +60,12 @@ public class Address implements Serializable {
         this.info = info;
     }
 
+    public List<Person> getPersons() {
+        return persons;
+    }
+
+    public void addPersons(Person person) {
+        this.persons.add(person);
+    }
+    
 }
