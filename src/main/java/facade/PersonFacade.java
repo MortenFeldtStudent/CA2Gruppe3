@@ -5,19 +5,18 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+
 /**
- * 
+ *
  * @author jörg
  */
-public class PersonFacade implements interfaces.IPersonFacade{
-    
+public class PersonFacade implements interfaces.IPersonFacade {
+
     private EntityManagerFactory emf;
 
     public PersonFacade(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    
-    
 
     @Override
     public PersonDTO getInfoFromPersonByPhoneNumber(int phoneNumber) {
@@ -29,7 +28,11 @@ public class PersonFacade implements interfaces.IPersonFacade{
     @Override
     public List<PersonDTO> getAllPersonsByHobby(String hobby) {
         EntityManager em = emf.createEntityManager();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO FROM Hobby h ORDER BY h.name ASC");
+
+        List<PersonDTO> list = (List<PersonDTO>) query.getResultList();
+
+        return list;
     }
 
     @Override
