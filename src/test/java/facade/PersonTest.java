@@ -67,31 +67,26 @@ public class PersonTest implements interfaces.IPersonTestFacade {
             //
             em.createQuery("delete from Phone").executeUpdate();
             em.createQuery("delete from Person").executeUpdate();
-
-            // Persist Person to DataBase
+            //Persist Person to DataBase
             em.persist(person1);
             em.persist(person2);
             em.persist(person3);
             em.persist(person4);
-            
+             //Persist Phone to DataBase
+            em.persist(phone1);
+            em.persist(phone2);
+            em.persist(phone3);
+            em.persist(phone4);
             // Add Person to Phone
             phone1.setPerson(person1);
             phone2.setPerson(person2);
             phone3.setPerson(person3);
             phone4.setPerson(person4);
-            //
-            em.persist(phone1);
-            em.persist(phone2);
-            em.persist(phone3);
-            em.persist(phone4);
-            
             person1.addPhone(phone1);
             person2.addPhone(phone2);
             person3.addPhone(phone3);
             person4.addPhone(phone4);
-            //Persist Phone to DataBase
 
-            // Commit Persist
             em.getTransaction().commit();
 
         } finally {
