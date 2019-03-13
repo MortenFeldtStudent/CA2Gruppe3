@@ -1,5 +1,6 @@
 package dto;
 
+import entity.Address;
 import entity.Person;
 import entity.Phone;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class PersonDTO {
     private String email;
     private String firstName;
     private String lastName;
-    private AddressDTO addressDto;
+    private Address address;
 
     private List<PhoneDTO> phoneList;
 
@@ -21,6 +22,7 @@ public class PersonDTO {
         this.firstName = person.getFirstName();
         this.lastName = person.getLastName();
         this.phoneList = convertPhone(person);
+        this.address = person.getAddress();
     }
 
     public List<PhoneDTO> convertPhone(Person person) {
@@ -67,17 +69,18 @@ public class PersonDTO {
         return phoneList;
     }
 
-    public void addPhoneList(PhoneDTO phone) {
+    public void setPhoneList(PhoneDTO phone) {
         this.phoneList.add(phone);
     }
 
-//    public List<HobbyDTO> getHobbies() {
-//        return hobbies;
-//    }
-//
-//    public void addHobbies(HobbyDTO hobby) {
-//        this.hobbies.add(hobby);
-//    }
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         String personDTO = "@1: @2 @3 @4";

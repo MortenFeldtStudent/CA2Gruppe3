@@ -29,9 +29,7 @@ public class Address implements Serializable {
     private String street;
     @Column(nullable = false)
     private String info;
-//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @JoinColumn(name = "FK_Address")
-//    private List<Person> persons = new ArrayList();
+    
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "FK_City")
     private CityInfo city;
