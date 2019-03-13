@@ -60,7 +60,7 @@ public class Ca2gruppe3Resource {
     public void putJson(String content) {
     }
 
-     @GET
+    @GET
     @Path("/person/complete")
     @Produces(MediaType.APPLICATION_JSON)
     public Response allPersonsAndInfo() {
@@ -68,6 +68,20 @@ public class Ca2gruppe3Resource {
         return Response.ok().entity(gson.toJson(allInfo)).build();
     }
     
+    @GET
+    @Path("/person/complete/id")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonById(int personId){
+        return Response.ok().entity(gson.toJson(pf.getPersonByID(personId))).build();
+    }
+    
+    @GET
+    @Path("/person/contactinfo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonsContactInfo(){
+        return
+    }
+
     @POST
     @Path("/person/add")
     @Consumes(MediaType.APPLICATION_JSON)

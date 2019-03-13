@@ -28,5 +28,8 @@ public interface IPersonTestFacade {
 
     // Get a Person by Id
     public void getPersonByIDTest();
+    
+     // Get all persons and information
+    public void getAllPersonsAndInfoTest();
 
 }

@@ -1,13 +1,17 @@
 package dto;
 
 import entity.Address;
+import entity.Hobby;
 import entity.Person;
 import entity.Phone;
+import facade.PersonFacade;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PersonDTO {
 
+    PersonFacade pf = new PersonFacade();
+    
     private Integer id;
     private String email;
     private String firstName;
@@ -15,22 +19,41 @@ public class PersonDTO {
     private Address address;
 
     private List<PhoneDTO> phoneList;
+    private List<HobbyDTO> hobbies;
 
     public PersonDTO(Person person) {
         this.id = person.getId();
         this.email = person.getEmail();
         this.firstName = person.getFirstName();
         this.lastName = person.getLastName();
-        this.phoneList = convertPhone(person);
+        this.phoneList = convertPhone(person.getPhones());
         this.address = person.getAddress();
+        this.hobbies = convertHobby(person.getHobbies());
     }
-
-    public List<PhoneDTO> convertPhone(Person person) {
+    
+        public PersonDTO(int id, String email, String firstName, String lastName, Object phones, Address address) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneList = convertPhone((List<Phone>) phones);
+        this.address = address;
+    }
+        
+    public List<PhoneDTO> convertPhone(List <Phone> phones) {
         List<PhoneDTO> phoneDTOList = new ArrayList<>();
-        for (Phone phone : person.getPhones()) {
+        for (Phone phone : phones) {
             phoneDTOList.add(new PhoneDTO(phone));
         }
         return phoneDTOList;
+    }
+
+    public List<HobbyDTO> convertHobby(List <Hobby> hobbies) {
+        List<HobbyDTO> hobbiesList = new ArrayList<>();
+        for (Hobby hobby : hobbies) {
+            hobbiesList.add(new HobbyDTO(hobby));
+        }
+        return hobbiesList;
     }
 
     public Integer getId() {
