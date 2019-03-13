@@ -28,9 +28,9 @@ public class CityInfo implements Serializable {
     private String zipCode;
     @Column(nullable = false)
     private String city;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "FK_City")
-    private final List<Address> adresses = new ArrayList();
+//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinColumn(name = "FK_City")
+//    private final List<Address> adresses = new ArrayList();
 
     public CityInfo() {
     }
@@ -60,7 +60,7 @@ public class CityInfo implements Serializable {
         return city;
     }
 
-    public void addCity(String city) {
+    public void setCity(String city) {
         this.city = city;
     }
 

@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -28,10 +29,12 @@ public class Address implements Serializable {
     private String street;
     @Column(nullable = false)
     private String info;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "FK_Address")
-    private List<Person> persons = new ArrayList();
-
+//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinColumn(name = "FK_Address")
+//    private List<Person> persons = new ArrayList();
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "FK_City")
+    private CityInfo city;
 
     public Address() {
     }
@@ -59,13 +62,23 @@ public class Address implements Serializable {
     public void setInfo(String info) {
         this.info = info;
     }
+    
+    
+//
+//    public List<Person> getPersons() {
+//        return persons;
+//    }
+//
+//    public void addPersons(Person person) {
+//        this.persons.add(person);
+//    }
 
-    public List<Person> getPersons() {
-        return persons;
+    public CityInfo getCity() {
+        return city;
     }
 
-    public void addPersons(Person person) {
-        this.persons.add(person);
+    public void setCity(CityInfo city) {
+        this.city = city;
     }
     
 }
