@@ -1,7 +1,7 @@
 package facade;
 
 import dto.PersonDTO;
-import entity.City;
+import entity.CityInfo;
 import entity.Hobby;
 import entity.Person;
 import entity.Phone;
@@ -26,7 +26,7 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     List<Person> personList = new ArrayList<>();
     List<Hobby> hobbyList = new ArrayList<>();
     List<Phone> phoneList = new ArrayList<>();
-    List<City> cityList = new ArrayList<>();
+    List<CityInfo> cityList = new ArrayList<>();
     // Create Test Persons entities   
     Person person1 = new Person("oertel@gmail.com", "Jörg", "Oertel");
     Person person2 = new Person("porse@gmail.com", "Rasmus", "Porse");
@@ -42,10 +42,10 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     Hobby hobby2 = new Hobby("boardgames", "Cafe Bastard");
     Hobby hobby3 = new Hobby("running", "Copenhagen Marathon");
     // Create Test City entities
-    City city1 = new City(2800, "Lyngby");
-    City city2 = new City(3100, "Stuttgart");
-    City city3 = new City(4200, "Copenhagen");
-    City city4 = new City(8900, "Lissabon");
+    CityInfo city1 = new CityInfo("2800", "Lyngby");
+    CityInfo city2 = new CityInfo("3800", "Stuttgart");
+    CityInfo city3 = new CityInfo("4200", "Copenhagen");
+    CityInfo city4 = new CityInfo("8900", "Lissabon");
 
     public PersonTest() {
         personList.add(person1);
@@ -161,7 +161,6 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     public void getAllPersonsByCityTest() {
         // Arrange
         String cityName = cityList.get(0).getCity();
-        PersonDTO = facade.getPersonByCity(cityName);
         // Act
         // Assert
 

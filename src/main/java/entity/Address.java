@@ -29,6 +29,8 @@ public class Address implements Serializable {
     private String street;
     @Column(nullable = false)
     private String info;
+
+    
     
     public Address(String street, String info) {
         this.street = street;
@@ -38,6 +40,7 @@ public class Address implements Serializable {
 //    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 //    @JoinColumn(name = "FK_Address")
 //    private List<Person> persons = new ArrayList();
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "FK_City")
     private CityInfo city;
