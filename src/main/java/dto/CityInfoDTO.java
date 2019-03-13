@@ -11,13 +11,13 @@ import entity.CityInfo;
  *
  * @author oerte
  */
-public class CityDTO {
+public class CityInfoDTO {
 
     private int id;
     private String zipCode;
     private String city;
 
-    public CityDTO(CityInfo city) {
+    public CityInfoDTO(CityInfo city) {
         this.id = city.getId();
         this.zipCode = city.getZipCode();
         this.city = city.getCity();

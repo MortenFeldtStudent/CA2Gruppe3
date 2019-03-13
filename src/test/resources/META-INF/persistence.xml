@@ -3,7 +3,7 @@
   <persistence-unit name="pu-test" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>entity.Address</class>
-    <class>entity.City</class>
+    <class>entity.CityInfo</class>
     <class>entity.Hobby</class>
     <class>entity.Person</class>
     <class>entity.Phone</class>
