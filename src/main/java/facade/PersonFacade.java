@@ -2,7 +2,6 @@ package facade;
 
 import dto.PersonDTO;
 import entity.Address;
-import entity.City;
 import entity.Person;
 import entity.Phone;
 import java.util.List;
@@ -72,7 +71,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         return (PersonDTO) query.getSingleResult();
     }
 
-    public PersonDTO postPersonWithAddressAndPhone(Person person, Phone phone, Address address, City city) {
+    public PersonDTO postPersonWithAddressAndPhone(Person person, Phone phone, Address address, CityInfo city) {
         EntityManager em = emf.createEntityManager();
         
         person.addPhone(phone);
