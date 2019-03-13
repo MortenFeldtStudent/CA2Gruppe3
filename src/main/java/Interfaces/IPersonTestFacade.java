@@ -18,7 +18,7 @@ public interface IPersonTestFacade {
     public void getAllPersonsByHobbyTest();
 
     //Get all persons living in a given city
-    public void getPersonByCityTest();
+    public void getAllPersonsByCityTest();
 
     //Get the count of people with a given hobby
     public void getCountOfPeopleWithGivenHobbyTest();

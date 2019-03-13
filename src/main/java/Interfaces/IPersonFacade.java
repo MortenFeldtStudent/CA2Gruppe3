@@ -21,7 +21,7 @@ public interface IPersonFacade {
     public List<PersonDTO> getAllPersonsByHobby(String hobby);
     
     //Get all persons living in a given city
-    public PersonDTO getPersonByCity(String cityName);
+    public List<PersonDTO> getAllPersonsByCity(String cityName);
     
     //Get the count of people with a given hobby
     public long getCountOfPeopleWithGivenHobby(String hobby);

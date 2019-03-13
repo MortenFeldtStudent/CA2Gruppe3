@@ -1,6 +1,7 @@
 package facade;
 
 import dto.PersonDTO;
+import entity.City;
 import entity.Hobby;
 import entity.Person;
 import entity.Phone;
@@ -25,6 +26,7 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     List<Person> personList = new ArrayList<>();
     List<Hobby> hobbyList = new ArrayList<>();
     List<Phone> phoneList = new ArrayList<>();
+    List<City> cityList = new ArrayList<>();
     // Create Test Persons entities   
     Person person1 = new Person("oertel@gmail.com", "Jörg", "Oertel");
     Person person2 = new Person("porse@gmail.com", "Rasmus", "Porse");
@@ -39,6 +41,11 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     Hobby hobby1 = new Hobby("football", "VFB Stuttgart");
     Hobby hobby2 = new Hobby("boardgames", "Cafe Bastard");
     Hobby hobby3 = new Hobby("running", "Copenhagen Marathon");
+    // Create Test City entities
+    City city1 = new City(2800, "Lyngby");
+    City city2 = new City(3100, "Stuttgart");
+    City city3 = new City(4200, "Copenhagen");
+    City city4 = new City(8900, "Lissabon");
 
     public PersonTest() {
         personList.add(person1);
@@ -54,7 +61,11 @@ public class PersonTest implements interfaces.IPersonTestFacade {
         hobbyList.add(hobby1);
         hobbyList.add(hobby2);
         hobbyList.add(hobby3);
-
+        //
+        cityList.add(city1);
+        cityList.add(city2);
+        cityList.add(city3);
+        cityList.add(city4);
     }
 
     @Before
@@ -65,6 +76,8 @@ public class PersonTest implements interfaces.IPersonTestFacade {
             // Start Transaction
             em.getTransaction().begin();
             //
+            em.createQuery("delete from City").executeUpdate();
+            em.createQuery("delete from Hobby").executeUpdate();
             em.createQuery("delete from Phone").executeUpdate();
             em.createQuery("delete from Person").executeUpdate();
             //Persist Person to DataBase
@@ -72,11 +85,20 @@ public class PersonTest implements interfaces.IPersonTestFacade {
             em.persist(person2);
             em.persist(person3);
             em.persist(person4);
-             //Persist Phone to DataBase
+            //Persist Phone to DataBase
             em.persist(phone1);
             em.persist(phone2);
             em.persist(phone3);
             em.persist(phone4);
+            //Persist Hobbies to Database
+            em.persist(hobby1);
+            em.persist(hobby2);
+            em.persist(hobby3);
+            //Persist City to DataBase
+            em.persist(city1);
+            em.persist(city2);
+            em.persist(city3);
+            em.persist(city4);
             // Add Person to Phone
             phone1.setPerson(person1);
             phone2.setPerson(person2);
@@ -86,6 +108,18 @@ public class PersonTest implements interfaces.IPersonTestFacade {
             person2.addPhone(phone2);
             person3.addPhone(phone3);
             person4.addPhone(phone4);
+            //Add Person to Hobbies
+            person1.setHobbies(hobby1);
+            person1.setHobbies(hobby2);
+            person3.setHobbies(hobby3);
+            person2.setHobbies(hobby3);
+            person4.setHobbies(hobby3);
+//            // Add Hobbies to Person
+            hobby1.addPersons(person1);
+            hobby2.addPersons(person1);
+            hobby3.addPersons(person3);
+            hobby3.addPersons(person2);
+            hobby3.addPersons(person4);
 
             em.getTransaction().commit();
 
@@ -112,23 +146,25 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     @Test
     @Override
     public void getAllPersonsByHobbyTest() {
-//        // Arrange
-//        String hobby = "football";
-//        List<PersonDTO> personDTOList = facade.getAllPersonsByHobby(hobby.toLowerCase());
-//        // Act
-//
-//        // Assert
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+        // Arrange
+        String hobby = "running";
+        List<PersonDTO> personDTOList = facade.getAllPersonsByHobby(hobby.toLowerCase());
+        // Act
+        int actual = personDTOList.size();
+        int expectual = 3;
+        // Assert
+        Assert.assertEquals(expectual, actual);
     }
 
     @Test
     @Override
-    public void getPersonByCityTest() {
+    public void getAllPersonsByCityTest() {
         // Arrange
+        String cityName = cityList.get(0).getCity();
+        PersonDTO = facade.getPersonByCity(cityName);
         // Act
         // Assert
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     @Test

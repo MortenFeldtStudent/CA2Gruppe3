@@ -28,7 +28,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
     @Override
     public List<PersonDTO> getAllPersonsByHobby(String hobby) {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT NEW dto.PersonDTO FROM Hobby h WHERE h.name = :name ORDER BY h.name ASC");
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p JOIN p.hobbies hb WHERE hb.name = :name ORDER BY hb.name ASC");
         query.setParameter("name", hobby);
         List<PersonDTO> list = query.getResultList();
 
@@ -36,10 +36,10 @@ public class PersonFacade implements interfaces.IPersonFacade {
     }
 
     @Override
-    public PersonDTO getPersonByCity(String cityName) {
+    public List<PersonDTO> getAllPersonsByCity(String cityName) {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT NEW dto.PersonDTO FROM CityInfo c WHERE c.city = :city");
-        return (PersonDTO) query.setParameter("city", cityName).getSingleResult();
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p JOIN p.  dto.CityDTO WHERE c.city = :city");
+        return  query.setParameter("city", cityName).getResultList();
          
     }
 
