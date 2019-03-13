@@ -7,6 +7,7 @@ import entity.City;
 import entity.Person;
 import entity.Phone;
 import facade.PersonFacade;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -59,6 +60,14 @@ public class Ca2gruppe3Resource {
     public void putJson(String content) {
     }
 
+     @GET
+    @Path("/person/complete")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response allPersonsAndInfo() {
+        List<PersonDTO> allInfo = pf.getAllPersonsAndInfo();
+        return Response.ok().entity(gson.toJson(allInfo)).build();
+    }
+    
     @POST
     @Path("/person/add")
     @Consumes(MediaType.APPLICATION_JSON)
