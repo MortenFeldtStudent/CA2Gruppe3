@@ -14,7 +14,7 @@ public class PersonDTO {
     private String lastName;
 
     private List<PhoneDTO> phoneList;
-    private List<HobbyDTO> hobbies;
+    //private List<HobbyDTO> hobbies;
 
     public PersonDTO(Person person) {
         this.id = person.getId();
@@ -22,7 +22,7 @@ public class PersonDTO {
         this.firstName = person.getFirstName();
         this.lastName = person.getLastName();
         this.phoneList = convertPhone(person);
-        this.hobbies = convertHobby(person);
+       // this.hobbies = convertHobby(person);
     }
 
     public List<PhoneDTO> convertPhone(Person person) {
@@ -33,13 +33,13 @@ public class PersonDTO {
         return phoneDTOList;
     }
 
-    public List<HobbyDTO> convertHobby(Person person) {
-        List<HobbyDTO> hobbyDTOList = new ArrayList<>();
-        for (Hobby hobby : person.getHobbies()) {
-            hobbyDTOList.add(new HobbyDTO(hobby));
-        }
-        return hobbyDTOList;
-    }
+//    public List<HobbyDTO> convertHobby(Person person) {
+//        List<HobbyDTO> hobbyDTOList = new ArrayList<>();
+//        for (Hobby hobby : person.getHobbies()) {
+//            hobbyDTOList.add(new HobbyDTO(hobby));
+//        }
+//        return hobbyDTOList;
+//    }
 
     public Integer getId() {
         return id;
@@ -81,13 +81,13 @@ public class PersonDTO {
         this.phoneList.add(phone);
     }
 
-    public List<HobbyDTO> getHobbies() {
-        return hobbies;
-    }
-
-    public void addHobbies(HobbyDTO hobby) {
-        this.hobbies.add(hobby);
-    }
+//    public List<HobbyDTO> getHobbies() {
+//        return hobbies;
+//    }
+//
+//    public void addHobbies(HobbyDTO hobby) {
+//        this.hobbies.add(hobby);
+//    }
 
     @Override
     public String toString() {

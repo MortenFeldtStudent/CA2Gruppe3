@@ -57,7 +57,7 @@ public class Phone implements Serializable {
         return person;
     }
 
-    public void addPerson(Person person) {
+    public void setPerson(Person person) {
         this.person = person;
     }
 
@@ -65,7 +65,7 @@ public class Phone implements Serializable {
         return description;
     }
 
-    public void addDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

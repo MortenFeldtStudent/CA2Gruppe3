@@ -65,47 +65,31 @@ public class PersonTest implements interfaces.IPersonTestFacade {
             // Start Transaction
             em.getTransaction().begin();
             //
-//            em.createQuery("delete from Hobby").executeUpdate();
-            em.createQuery("delete from Hobby").executeUpdate();
             em.createQuery("delete from Phone").executeUpdate();
             em.createQuery("delete from Person").executeUpdate();
 
-            // Add Person to Phone
-            phone1.addPerson(person1);
-            phone2.addPerson(person2);
-            phone3.addPerson(person3);
-            phone4.addPerson(person4);
-            //
-//            person1.addPhoneNumber(phone1);
-//            person2.addPhoneNumber(phone2);
-//            person3.addPhoneNumber(phone3);
-//            person4.addPhoneNumber(phone4);
-//            // Add Person to Hobbies
-//            person1.addHobbies(hobby1);
-//            person1.addHobbies(hobby2);
-//            person3.addHobbies(hobby3);
-//            person2.addHobbies(hobby3);
-//            person4.addHobbies(hobby3);
-////            // Add Hobbies to Person
-//            hobby1.addPersons(person1);
-//            hobby2.addPersons(person1);
-//            hobby3.addPersons(person3);
-//            hobby3.addPersons(person2);
-//            hobby3.addPersons(person4);
             // Persist Person to DataBase
             em.persist(person1);
             em.persist(person2);
             em.persist(person3);
             em.persist(person4);
-            //Persist Phone to DataBase
+            
+            // Add Person to Phone
+            phone1.setPerson(person1);
+            phone2.setPerson(person2);
+            phone3.setPerson(person3);
+            phone4.setPerson(person4);
+            //
             em.persist(phone1);
             em.persist(phone2);
             em.persist(phone3);
             em.persist(phone4);
-            //Persist Hobbies to Database
-//            em.persist(hobby1);
-//            em.persist(hobby2);
-//            em.persist(hobby3);
+            
+            person1.addPhone(phone1);
+            person2.addPhone(phone2);
+            person3.addPhone(phone3);
+            person4.addPhone(phone4);
+            //Persist Phone to DataBase
 
             // Commit Persist
             em.getTransaction().commit();

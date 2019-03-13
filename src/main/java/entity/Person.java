@@ -76,22 +76,29 @@ public class Person implements Serializable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    
+    public void addPhone(Phone phone){
+        phones.add(phone);
+        phone.setPerson(this);
+    }
 
     public List<Phone> getPhones() {
         return phones;
     }
 
-    public void addPhoneNumber(Phone phoneNumber) {
-        this.phones.add(phoneNumber);
+    public void setPhones(Phone phones) {
+        this.phones.add(phones);
     }
 
     public List<Hobby> getHobbies() {
         return hobbies;
     }
 
-    public void addHobbies(Hobby hobbies) {
+    public void setHobbies(Hobby hobbies) {
         this.hobbies.add(hobbies);
     }
+
+    
 
     
 }
