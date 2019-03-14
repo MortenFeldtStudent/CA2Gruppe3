@@ -112,5 +112,18 @@ public class PersonDTO {
         personDTO = personDTO.replace("@8", this.address.getCity().getCity());
         return personDTO;
     }
+    
+        public String toStringContactInfo() {
+        String personDTO = "@1: @2 @3 @4 @5 @6 @7 @8";
+        personDTO = personDTO.replace("@1", this.firstName);
+        personDTO = personDTO.replace("@2", this.lastName);
+        personDTO = personDTO.replace("@3", this.email);
+        personDTO = personDTO.replace("@4", this.address.getStreet());
+        personDTO = personDTO.replace("@5", this.address.getInfo());
+        personDTO = personDTO.replace("@6", this.address.getCity().getZipCode());
+        personDTO = personDTO.replace("@7", this.address.getCity().getCity());
+        personDTO = personDTO.replace("@8", this.phoneList.toString());
+        return personDTO;
+    }
 
 }

@@ -118,7 +118,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         PersonFacade pf = new PersonFacade(emf);
         List<PersonDTO> persons = pf.getAllPersonsContactInfo();
         for (PersonDTO person : persons) {
-            System.out.println(person.toStringAll());
+            System.out.println(person.toStringContactInfo());
         }
     }
 }
