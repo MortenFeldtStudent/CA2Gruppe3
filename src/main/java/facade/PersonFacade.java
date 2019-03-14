@@ -101,6 +101,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         return new PersonDTO(person);
     }
 
+    @Override
     public List<PersonDTO> getAllPersonsContactInfo() {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT (p) FROM Person p");
@@ -120,5 +121,4 @@ public class PersonFacade implements interfaces.IPersonFacade {
             System.out.println(person.toStringAll());
         }
     }
-    
 }

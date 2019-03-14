@@ -5,11 +5,6 @@
  */
 package interfaces;
 
-import dto.PersonDTO;
-import entity.Address;
-import entity.CityInfo;
-import entity.Person;
-import entity.Phone;
 
 /**
  *
@@ -40,5 +35,8 @@ public interface IPersonTestFacade {
     
     // Post a Person with Addresss and Phone
     public void postPersonWithAddressAndPhone();
+    
+    //  GET Name, email, addresse, phone
+    public void getAllPersonsContactInfoTest();
 
 }

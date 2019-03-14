@@ -5,7 +5,6 @@
  */
 package facade;
 
-import dto.CityInfoDTO;
 import dto.PersonDTO;
 import entity.Address;
 import entity.CityInfo;
@@ -259,6 +258,15 @@ public class PersonTest implements interfaces.IPersonTestFacade {
 
     @Override
     public void postPersonWithAddressAndPhone() {
+        // Arrange
+        
+        //Act
+        //Assert
+    }
+    
+
+    @Override
+    public void getAllPersonsContactInfoTest() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
