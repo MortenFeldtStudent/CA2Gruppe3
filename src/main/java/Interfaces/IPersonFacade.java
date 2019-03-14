@@ -42,7 +42,7 @@ public interface IPersonFacade {
     // Post a Person with Addresss and Phone
     public PersonDTO postPersonWithAddressAndPhone(Person person, Phone phone, Address address, CityInfo city);
     
-    //  GET Name, email, addresse, phone
+    //  GET id, firstName, lastName, email, addresse, phone
      public List<PersonDTO> getAllPersonsContactInfo();
     
     
