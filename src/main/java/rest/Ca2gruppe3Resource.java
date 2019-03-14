@@ -61,7 +61,7 @@ public class Ca2gruppe3Resource {
     }
 
     @GET
-    @Path("/person/complete")
+    @Path("/persons/complete")
     @Produces(MediaType.APPLICATION_JSON)
     public Response allPersonsAndInfo() {
         List<PersonDTO> allInfo = pf.getAllPersonsAndInfo();
@@ -76,11 +76,18 @@ public class Ca2gruppe3Resource {
     }
     
     @GET
-    @Path("/person/contactinfo")
+    @Path("/persons/contactinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsContactInfo(){
-        return null;
+        return Response.ok().entity(gson.toJson(pf.getAllPersonsContactInfo())).build();
         
+    }
+    
+    @GET
+    @Path("/person/contactinfo/id")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSinglePersonContactInfo(int personId){
+        return Response.ok().entity(gson.toJson(pf.getSinglePersonContactInfo(personId))).build();
     }
 
     @POST

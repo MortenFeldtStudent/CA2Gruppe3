@@ -113,6 +113,13 @@ public class PersonFacade implements interfaces.IPersonFacade {
         return personDTOs;
     }
 
+    public PersonDTO getSinglePersonContactInfo(int id){
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createQuery("SELECT (p) FROM Person p WHERE p.id = :id");
+        query.setParameter("id", id);
+        return (PersonDTO) query.getSingleResult();
+    }
+    
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
         PersonFacade pf = new PersonFacade(emf);
