@@ -70,9 +70,9 @@ public class Ca2gruppe3Resource {
     }
 
     @GET
-    @Path("/person/complete/id")
+    @Path("/person/complete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPersonById(int personId) {
+    public Response getPersonById(@PathParam("id") int personId) {
         return Response.ok().entity(gson.toJson(pf.getPersonByID(personId))).build();
     }
 
@@ -83,8 +83,6 @@ public class Ca2gruppe3Resource {
         return Response.ok().entity(gson.toJson(pf.getAllPersonsContactInfo())).build();
     }
         
-
-
     @GET
     @Path("/person/{phonenumber}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -110,12 +108,20 @@ public class Ca2gruppe3Resource {
     }
     
     @GET
-    @Path("/person/contactinfo/id")
+    @Path("/person/contactinfo/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSinglePersonContactInfo(int personId){
+    public Response getSinglePersonContactInfo(@PathParam("id") int personId){
         return Response.ok().entity(gson.toJson(pf.getSinglePersonContactInfo(personId))).build();
     }
-
+    
+    @GET
+    @Path("persons/count/{hobby}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response countPersonsForHobby(@PathParam("hobby") String hobby) {
+        Long count = pf.getCountOfPeopleWithGivenHobby(hobby);
+        return Response.ok().entity(gson.toJson(count)).build();
+    }
+    
     @POST
     @Path("/person/add")
     @Consumes(MediaType.APPLICATION_JSON)
