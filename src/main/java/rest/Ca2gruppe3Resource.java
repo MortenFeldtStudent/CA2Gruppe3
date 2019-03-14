@@ -18,6 +18,7 @@ import static javax.ws.rs.HttpMethod.POST;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -67,20 +68,45 @@ public class Ca2gruppe3Resource {
         List<PersonDTO> allInfo = pf.getAllPersonsAndInfo();
         return Response.ok().entity(gson.toJson(allInfo)).build();
     }
-    
+
     @GET
     @Path("/person/complete/id")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPersonById(int personId){
+    public Response getPersonById(int personId) {
         return Response.ok().entity(gson.toJson(pf.getPersonByID(personId))).build();
     }
-    
+
     @GET
     @Path("/persons/contactinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsContactInfo(){
         return Response.ok().entity(gson.toJson(pf.getAllPersonsContactInfo())).build();
+    }
         
+
+
+    @GET
+    @Path("/person/{phonenumber}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonByPhoneNumber(@PathParam("phonenumber") int phone) {
+        PersonDTO person = pf.getInfoFromPersonByPhoneNumber(phone);
+        return Response.ok().entity(gson.toJson(person)).build();
+    }
+
+    @GET
+    @Path("/persons/{hobby}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonsByHobby(@PathParam("hobby") String hobby) {
+        List<PersonDTO> persons = pf.getAllPersonsByHobby(hobby);
+        return Response.ok().entity(gson.toJson(persons)).build();
+    }
+
+    @GET
+    @Path("/persons/{city}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonsByCity(@PathParam("city") String city) {
+        List<PersonDTO> persons = pf.getAllPersonsByCity(city);
+        return Response.ok().entity(gson.toJson(persons)).build();
     }
     
     @GET
