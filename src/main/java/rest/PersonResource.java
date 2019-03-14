@@ -33,12 +33,8 @@ public class PersonResource {
     PersonFacade pf = new PersonFacade(emf);
     Gson gson = new Gson();
 
-    /**
-     * Creates a new instance of Ca2gruppe3Resource
-     */
     public PersonResource() {
     }
-
 
     @GET
     @Path("/all/complete")
