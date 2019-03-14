@@ -119,6 +119,19 @@ public class PersonFacade implements interfaces.IPersonFacade {
         query.setParameter("id", id);
         return (PersonDTO) query.getSingleResult();
     }
+
+
+    public void deletePersonById(int id) {
+        EntityManager em = emf.createEntityManager();
+        Person person = em.find(Person.class, id);
+        try {
+            em.getTransaction().begin();
+            em.remove(person);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
     
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
@@ -128,4 +141,5 @@ public class PersonFacade implements interfaces.IPersonFacade {
             System.out.println(person.toStringContactInfo());
         }
     }
+
 }
