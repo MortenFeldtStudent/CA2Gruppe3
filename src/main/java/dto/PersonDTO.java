@@ -97,13 +97,15 @@ public class PersonDTO {
         this.phoneList.add(phone);
     }
 
-    public Address getAddress() {
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressDTO address) {
         this.address = address;
     }
+
+    
 
     @Override
     public String toString() {
@@ -123,8 +125,8 @@ public class PersonDTO {
         personDTO = personDTO.replace("@4", this.email);
         personDTO = personDTO.replace("@5", this.address.getStreet());
         personDTO = personDTO.replace("@6", this.address.getInfo());
-        personDTO = personDTO.replace("@7", this.address.getCity().getZipCode());
-        personDTO = personDTO.replace("@8", this.address.getCity().getCity());
+        personDTO = personDTO.replace("@7", this.address.getCityInfo().getZipCode());
+        personDTO = personDTO.replace("@8", this.address.getCityInfo().getCity());
         return personDTO;
     }
     
@@ -135,8 +137,8 @@ public class PersonDTO {
         personDTO = personDTO.replace("@3", this.email);
         personDTO = personDTO.replace("@4", this.address.getStreet());
         personDTO = personDTO.replace("@5", this.address.getInfo());
-        personDTO = personDTO.replace("@6", this.address.getCity().getZipCode());
-        personDTO = personDTO.replace("@7", this.address.getCity().getCity());
+        personDTO = personDTO.replace("@6", this.address.getCityInfo().getCity());
+        personDTO = personDTO.replace("@7", this.address.getCityInfo().getZipCode());
         personDTO = personDTO.replace("@8", this.phoneList.toString());
         return personDTO;
     }
