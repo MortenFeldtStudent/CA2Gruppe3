@@ -20,7 +20,6 @@ public class AddressDTO {
     private CityInfo cityInfo;
 
     public AddressDTO(Address address) {
-        this.id = address.getId();
         this.street = address.getStreet();
         this.info = address.getInfo();
         this.cityInfo = address.getCity();
