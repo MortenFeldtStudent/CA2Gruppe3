@@ -44,27 +44,13 @@ public class Ca2gruppe3Resource {
     public Ca2gruppe3Resource() {
     }
 
-    /**
-     * Retrieves representation of an instance of rest.Ca2gruppe3Resource
-     *
-     * @return an instance of java.lang.String
-     */
+    
     @GET
-    @Path("test")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        return "TEST Joerg Hallo";
+    public String test() {
+        return "Hej";
     }
+    
 
-    /**
-     * PUT method for updating or creating an instance of Ca2gruppe3Resource
-     *
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
-    }
 
     @GET
     @Path("/persons/complete")
@@ -89,7 +75,7 @@ public class Ca2gruppe3Resource {
     }
         
     @GET
-    @Path("/person/{phonenumber}")
+    @Path("/person/phone/{phonenumber}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonByPhoneNumber(@PathParam("phonenumber") int phone) {
         PersonDTO person = pf.getInfoFromPersonByPhoneNumber(phone);
@@ -97,7 +83,7 @@ public class Ca2gruppe3Resource {
     }
 
     @GET
-    @Path("/persons/{hobby}")
+    @Path("/persons/hobby/{hobby}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsByHobby(@PathParam("hobby") String hobby) {
         List<PersonDTO> persons = pf.getAllPersonsByHobby(hobby);
