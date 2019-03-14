@@ -27,7 +27,7 @@ import org.junit.Test;
  */
 public class PersonTest implements interfaces.IPersonTestFacade {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu-test", null);
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
     private PersonFacade facade = new PersonFacade(emf);
     //Create Lists  for testing
     private List<Person> personList = new ArrayList<>();

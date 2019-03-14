@@ -25,12 +25,12 @@ public class PersonDTO {
         this.address = person.getAddress();
     }
 
-    public PersonDTO(int id, String email, String firstName, String lastName, Phone phones, Address address) {
+    public PersonDTO(int id, String email, String firstName, String lastName, List<Phone> phones, Address address) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneList = convertPhone((List<Phone>) phones);
+        this.phoneList = convertPhone(phones);
         this.address = address;
     }
 
