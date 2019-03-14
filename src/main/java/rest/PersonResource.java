@@ -16,16 +16,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import static javax.ws.rs.HttpMethod.DELETE;
-import static javax.ws.rs.HttpMethod.POST;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 
 @Path("person")
 public class PersonResource {
@@ -43,12 +39,6 @@ public class PersonResource {
     public PersonResource() {
     }
 
-    
-    @GET
-    public String test() {
-        return "Hej";
-    }
-    
 
     @GET
     @Path("/all/complete")
@@ -68,10 +58,10 @@ public class PersonResource {
     @GET
     @Path("/all/contactinfo")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPersonsContactInfo(){
+    public Response getPersonsContactInfo() {
         return Response.ok().entity(gson.toJson(pf.getAllPersonsContactInfo())).build();
     }
-        
+
     @GET
     @Path("/phone/{phonenumber}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -95,14 +85,14 @@ public class PersonResource {
         List<PersonDTO> persons = pf.getAllPersonsByCity(city);
         return Response.ok().entity(gson.toJson(persons)).build();
     }
-    
+
     @GET
     @Path("/contactinfo/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSinglePersonContactInfo(@PathParam("id") int personId){
+    public Response getSinglePersonContactInfo(@PathParam("id") int personId) {
         return Response.ok().entity(gson.toJson(pf.getSinglePersonContactInfo(personId))).build();
     }
-    
+
     @GET
     @Path("/count/{hobby}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -110,14 +100,14 @@ public class PersonResource {
         Long count = pf.getCountOfPeopleWithGivenHobby(hobby);
         return Response.ok().entity(gson.toJson(count)).build();
     }
-    
+
     @DELETE
     @Path("/delete/{id}")
     public Response deletePersonById(@PathParam("id") int id) {
         pf.deletePersonById(id);
         return Response.ok().build();
     }
-    
+
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
