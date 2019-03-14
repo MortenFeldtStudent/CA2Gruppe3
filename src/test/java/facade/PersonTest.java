@@ -26,7 +26,7 @@ import org.junit.Test;
  */
 public class PersonTest implements interfaces.IPersonTestFacade {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu-test", null);
     private PersonFacade facade = new PersonFacade(emf);
     //Create Lists  for testing
     private List<Person> personList = new ArrayList<>();
@@ -256,18 +256,33 @@ public class PersonTest implements interfaces.IPersonTestFacade {
         Assert.assertEquals(expected, actual);
     }
 
+    @Test
     @Override
     public void postPersonWithAddressAndPhone() {
         // Arrange
-        
+        Person person = personList.get(0);
+        Phone phone = phoneList.get(0);
+        Address address = addressList.get(0);
+        CityInfo city = cityList.get(0);
+        PersonDTO personDto = facade.postPersonWithAddressAndPhone(person, phone, address, city);
         //Act
+        String actual = personDto.getEmail();
+        String expected = person.getEmail();
         //Assert
+        Assert.assertEquals(expected, actual);
     }
     
-
+    @Test
     @Override
     public void getAllPersonsContactInfoTest() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Arrange
+        List<PersonDTO> personDtoList = facade.getAllPersonsContactInfo();
+        //Act
+        int actual = personDtoList.size();
+        int expected = 4;
+        //Assert
+        Assert.assertEquals(expected, actual);
+        
     }
 
 }

@@ -36,7 +36,7 @@ public interface IPersonTestFacade {
     // Post a Person with Addresss and Phone
     public void postPersonWithAddressAndPhone();
     
-    //  GET Name, email, addresse, phone
+    // GET id, firstName, lastName, email, addresse, phone
     public void getAllPersonsContactInfoTest();
 
 }
