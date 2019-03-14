@@ -1,6 +1,7 @@
 package dto;
 
 import entity.Address;
+import entity.Hobby;
 import entity.Person;
 import entity.Phone;
 import java.util.ArrayList;
@@ -12,9 +13,10 @@ public class PersonDTO {
     private String email;
     private String firstName;
     private String lastName;
-    private Address address;
+    private AddressDTO address;
 
     private List<PhoneDTO> phoneList;
+    private List<HobbyDTO> hobbyList;
 
     public PersonDTO(Person person) {
         this.id = person.getId();
@@ -22,7 +24,8 @@ public class PersonDTO {
         this.firstName = person.getFirstName();
         this.lastName = person.getLastName();
         this.phoneList = convertPhone(person.getPhones());
-        this.address = person.getAddress();
+        this.address = convertAddress(person.getAddress());
+        this.hobbyList = convertHobby(person.getHobbies());
     }
 
     public PersonDTO(int id, String email, String firstName, String lastName, List<Phone> phones, Address address) {
@@ -31,7 +34,7 @@ public class PersonDTO {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneList = convertPhone(phones);
-        this.address = address;
+        this.address = convertAddress(address);
     }
 
     public List<PhoneDTO> convertPhone(List<Phone> phones) {
@@ -40,6 +43,18 @@ public class PersonDTO {
             phoneDTOList.add(new PhoneDTO(phone));
         }
         return phoneDTOList;
+    }
+    
+    public List<HobbyDTO> convertHobby(List<Hobby> hobbies) {
+        List<HobbyDTO> hobbiesDTO = new ArrayList();
+        for (Hobby h : hobbies) {
+            hobbiesDTO.add(new HobbyDTO(h));
+        }
+        return hobbiesDTO;
+    }
+    
+    public AddressDTO convertAddress(Address address) {
+        return new AddressDTO(address);
     }
 
     public Integer getId() {
