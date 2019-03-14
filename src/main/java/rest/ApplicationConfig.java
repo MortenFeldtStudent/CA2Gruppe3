@@ -22,7 +22,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(filter.RequestFilter.class);
         resources.add(filter.ResponseFilter.class);
-        resources.add(rest.Ca2gruppe3Resource.class);
+        resources.add(rest.PersonResource.class);
     }
     
 }
