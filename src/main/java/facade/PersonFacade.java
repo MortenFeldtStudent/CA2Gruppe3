@@ -64,7 +64,8 @@ public class PersonFacade implements interfaces.IPersonFacade {
     @Override
     public List<String> getAllZipCodes() {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT c.zipCode  FROM CityInfo c");
+        //Query query = em.createQuery("SELECT c.zipCode  FROM CityInfo c");
+        Query query = em.createQuery("SELECT NEW dto.CityInfoDTO (c) FROM CityInfo c");
         return query.getResultList();
     }
 
