@@ -47,4 +47,11 @@ class PhoneDTO {
         this.description = description;
     }
 
+    @Override
+    public String toString() {
+        return "number=" + number + ", description=" + description;
+    }
+    
+    
+
 }
