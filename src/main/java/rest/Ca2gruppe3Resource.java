@@ -22,7 +22,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("person")
+@Path("gruppe")
 public class Ca2gruppe3Resource {
 
     @Context
@@ -50,15 +50,6 @@ public class Ca2gruppe3Resource {
         return "TEST Joerg Hallo";
     }
 
-    /**
-     * PUT method for updating or creating an instance of Ca2gruppe3Resource
-     *
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
-    }
 
     @GET
     @Path("/persons/complete")
@@ -99,7 +90,7 @@ public class Ca2gruppe3Resource {
     }
 
     @GET
-    @Path("/persons/{city}")
+    @Path("/persons/city/{city}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsByCity(@PathParam("city") String city) {
         List<PersonDTO> persons = pf.getAllPersonsByCity(city);
