@@ -5,9 +5,11 @@ import entity.Address;
 import entity.CityInfo;
 import entity.Person;
 import entity.Phone;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 /**
@@ -99,11 +101,24 @@ public class PersonFacade implements interfaces.IPersonFacade {
         return new PersonDTO(person);
     }
 
-    /// We allready have that method !!!!!!!!!!!!!!!!!!?????????????????????
-//    public List<PersonDTO> getAllPersonsContactInfo() {
-//        EntityManager em = emf.createEntityManager();
-//        Query query = em.createQuery("SELECT NEW dto.PersonDTO (p.id, p.email, p.firstName, p.lastName, p.address, p.phones) FROM Person p");
-//        List<PersonDTO> list = query.getResultList();
-//        return list;
-//    }
+    public List<PersonDTO> getAllPersonsContactInfo() {
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createQuery("SELECT (p) FROM Person p");
+        List<Person> personList = query.getResultList();
+        List<PersonDTO> personDTOs = new ArrayList();
+        for (Person p : personList) {
+            personDTOs.add(new PersonDTO(p.getId(), p.getEmail(), p.getFirstName(), p.getLastName(), p.getPhones(), p.getAddress()));
+        }
+        return personDTOs;
+    }
+
+    public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
+        PersonFacade pf = new PersonFacade(emf);
+        List<PersonDTO> persons = pf.getAllPersonsContactInfo();
+        for (PersonDTO person : persons) {
+            System.out.println(person.toStringAll());
+        }
+    }
+    
 }
