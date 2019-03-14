@@ -24,7 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("person")
-public class Ca2gruppe3Resource {
+public class PersonResource {
 
     @Context
     private UriInfo context;
@@ -36,16 +36,12 @@ public class Ca2gruppe3Resource {
     /**
      * Creates a new instance of Ca2gruppe3Resource
      */
-    public Ca2gruppe3Resource() {
+    public PersonResource() {
     }
 
-    @GET
-    public String test() {
-        return "Hej";
-    }
 
     @GET
-    @Path("/persons/complete")
+    @Path("/all/complete")
     @Produces(MediaType.APPLICATION_JSON)
     public Response allPersonsAndInfo() {
         List<PersonDTO> allInfo = pf.getAllPersonsAndInfo();
@@ -53,21 +49,21 @@ public class Ca2gruppe3Resource {
     }
 
     @GET
-    @Path("/person/complete/{id}")
+    @Path("/complete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonById(@PathParam("id") int personId) {
         return Response.ok().entity(gson.toJson(pf.getPersonByID(personId))).build();
     }
 
     @GET
-    @Path("/persons/contactinfo")
+    @Path("/all/contactinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsContactInfo() {
         return Response.ok().entity(gson.toJson(pf.getAllPersonsContactInfo())).build();
     }
 
     @GET
-    @Path("/person/phone/{phonenumber}")
+    @Path("/phone/{phonenumber}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonByPhoneNumber(@PathParam("phonenumber") int phone) {
         PersonDTO person = pf.getInfoFromPersonByPhoneNumber(phone);
@@ -75,7 +71,7 @@ public class Ca2gruppe3Resource {
     }
 
     @GET
-    @Path("/persons/hobby/{hobby}")
+    @Path("/all/hobby/{hobby}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsByHobby(@PathParam("hobby") String hobby) {
         List<PersonDTO> persons = pf.getAllPersonsByHobby(hobby);
@@ -83,7 +79,7 @@ public class Ca2gruppe3Resource {
     }
 
     @GET
-    @Path("/persons/city/{city}")
+    @Path("/all/city/{city}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsByCity(@PathParam("city") String city) {
         List<PersonDTO> persons = pf.getAllPersonsByCity(city);
@@ -91,14 +87,14 @@ public class Ca2gruppe3Resource {
     }
 
     @GET
-    @Path("/person/contactinfo/{id}")
+    @Path("/contactinfo/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSinglePersonContactInfo(@PathParam("id") int personId) {
         return Response.ok().entity(gson.toJson(pf.getSinglePersonContactInfo(personId))).build();
     }
 
     @GET
-    @Path("persons/count/{hobby}")
+    @Path("/count/{hobby}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response countPersonsForHobby(@PathParam("hobby") String hobby) {
         Long count = pf.getCountOfPeopleWithGivenHobby(hobby);
@@ -106,14 +102,14 @@ public class Ca2gruppe3Resource {
     }
 
     @DELETE
-    @Path("person/{id}")
+    @Path("/delete/{id}")
     public Response deletePersonById(@PathParam("id") int id) {
         pf.deletePersonById(id);
         return Response.ok().build();
     }
 
     @POST
-    @Path("/person/add")
+    @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postPersonWithAddressAndPhone(String content, @QueryParam("phone") int phonenumber,
