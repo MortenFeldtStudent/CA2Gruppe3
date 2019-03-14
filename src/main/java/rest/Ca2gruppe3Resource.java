@@ -9,11 +9,15 @@ import entity.Phone;
 import facade.PersonFacade;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import static javax.ws.rs.HttpMethod.DELETE;
+import static javax.ws.rs.HttpMethod.POST;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
@@ -22,13 +26,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("gruppe")
+
+@Path("person")
 public class Ca2gruppe3Resource {
 
     @Context
     private UriInfo context;
 
-    private EntityManagerFactory emf;
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
     PersonFacade pf = new PersonFacade(emf);
     Gson gson = new Gson();
 
@@ -38,17 +43,12 @@ public class Ca2gruppe3Resource {
     public Ca2gruppe3Resource() {
     }
 
-    /**
-     * Retrieves representation of an instance of rest.Ca2gruppe3Resource
-     *
-     * @return an instance of java.lang.String
-     */
+    
     @GET
-    @Path("/test")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        return "TEST Joerg Hallo";
+    public String test() {
+        return "Hej";
     }
+    
 
 
     @GET
@@ -74,7 +74,7 @@ public class Ca2gruppe3Resource {
     }
         
     @GET
-    @Path("/person/{phonenumber}")
+    @Path("/person/phone/{phonenumber}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonByPhoneNumber(@PathParam("phonenumber") int phone) {
         PersonDTO person = pf.getInfoFromPersonByPhoneNumber(phone);
@@ -82,7 +82,7 @@ public class Ca2gruppe3Resource {
     }
 
     @GET
-    @Path("/persons/{hobby}")
+    @Path("/persons/hobby/{hobby}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsByHobby(@PathParam("hobby") String hobby) {
         List<PersonDTO> persons = pf.getAllPersonsByHobby(hobby);
@@ -110,6 +110,13 @@ public class Ca2gruppe3Resource {
     public Response countPersonsForHobby(@PathParam("hobby") String hobby) {
         Long count = pf.getCountOfPeopleWithGivenHobby(hobby);
         return Response.ok().entity(gson.toJson(count)).build();
+    }
+    
+    @DELETE
+    @Path("person/{id}")
+    public Response deletePersonById(@PathParam("id") int id) {
+        pf.deletePersonById(id);
+        return Response.ok().build();
     }
     
     @POST
