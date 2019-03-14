@@ -5,6 +5,8 @@ import entity.Address;
 import entity.CityInfo;
 import entity.Person;
 import entity.Phone;
+import exceptions.PersonNotFoundException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -69,13 +71,15 @@ public class PersonFacade implements interfaces.IPersonFacade {
     }
 
     @Override
-    public PersonDTO getPersonByID(int personId) {
+    public PersonDTO getPersonByID(int personId) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p WHERE p.id = :id");
         query.setParameter("id", personId);
-        return (PersonDTO) query.getSingleResult();
+        PersonDTO p = (PersonDTO) query.getSingleResult();
+        return p;
     }
 
+    
     @Override
     public List<PersonDTO> getAllPersonsAndInfo() {
         EntityManager em = emf.createEntityManager();
