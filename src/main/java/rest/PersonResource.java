@@ -6,6 +6,8 @@ import entity.Address;
 import entity.CityInfo;
 import entity.Person;
 import entity.Phone;
+import exceptions.ExceptionDTO;
+import exceptions.PersonNotFoundException;
 import facade.PersonFacade;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
@@ -16,10 +18,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -37,25 +41,58 @@ public class PersonResource {
     }
 
     @GET
+    @Path("/test/ex")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String testExceptionDTO() {
+        try {
+            throw new NotFoundException("Person doesn't exist!");
+        } catch (NotFoundException e) {
+            ExceptionDTO exDTO = new ExceptionDTO(e, 406, true);
+            return gson.toJson(exDTO);
+        }
+
+    }
+
+    @GET
     @Path("/all/complete")
     @Produces(MediaType.APPLICATION_JSON)
     public Response allPersonsAndInfo() {
         List<PersonDTO> allInfo = pf.getAllPersonsAndInfo();
+        if (allInfo == null) {
+            throw new NotFoundException("Could not find any persons.");
+        }
         return Response.ok().entity(gson.toJson(allInfo)).build();
+
     }
 
     @GET
     @Path("/complete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonById(@PathParam("id") int personId) {
-        return Response.ok().entity(gson.toJson(pf.getPersonByID(personId))).build();
+        PersonDTO p = null;
+        try {
+            p = pf.getPersonByID(personId);
+        } catch (PersonNotFoundException ex) {
+            throw new PersonNotFoundException("Person does not exist.");
+        } catch (WebApplicationException ex) {
+            if (ex.) {
+                
+            }
+        }
+        return Response.ok().entity(gson.toJson(p)).build();
     }
 
     @GET
     @Path("/all/contactinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsContactInfo() {
-        return Response.ok().entity(gson.toJson(pf.getAllPersonsContactInfo())).build();
+        List<PersonDTO> allInfo = pf.getAllPersonsContactInfo();
+        if (allInfo == null) {
+            throw new NotFoundException("Could not find any persons.");
+        }
+
+        return Response.ok()
+                .entity(gson.toJson(allInfo)).build();
     }
 
     @GET
