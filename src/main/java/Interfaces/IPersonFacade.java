@@ -44,7 +44,6 @@ public interface IPersonFacade {
     public PersonDTO postPersonWithAddressAndPhone(Person person, Phone phone, Address address, CityInfo city);
     
     //  GET id, firstName, lastName, email, addresse, phone
-     public List<PersonDTO> getAllPersonsContactInfo();
-    
-    
+    public List<PersonDTO> getAllPersonsContactInfo();
+     
 }
