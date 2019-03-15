@@ -34,10 +34,10 @@ public interface IPersonFacade {
     // Get a list of all zip codes in Denmark
     public List<String> getAllZipCodes();
     
-    // Get Person By Id
+    // Get PersonDTO By Id
     public PersonDTO getPersonByID(int personId) throws PersonNotFoundException;
     
-    // Get all persons and information
+    // Get all persons with associated information as DTO objects.
     public List<PersonDTO> getAllPersonsAndInfo();
     
     // Post a Person with Addresss and Phone
@@ -46,5 +46,16 @@ public interface IPersonFacade {
     //  GET id, firstName, lastName, email, addresse, phone
      public List<PersonDTO> getAllPersonsContactInfo();
     
+    // GET id, firstName, lastName, email, address, phone 
+     public PersonDTO getSinglePersonContactInfo(int id);
+     
+    // Returns error if the person does not exist. 
+     public void deletePersonById(int id) throws PersonNotFoundException;
+     
+    // Takes firstName, lastName and email as input parameters.  
+     public PersonDTO editPerson(Person p);
+     
+    // Get Person object by ID
+     public Person getPersonByIdToEdit(int personId) throws PersonNotFoundException;
     
 }

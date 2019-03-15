@@ -133,7 +133,7 @@ public class PersonResource {
         } catch (PersonNotFoundException ex) {
             return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson(ex.getMessage())).build();
         }
-        return Response.ok().entity("Person with id: '" + id + "' was successfully deleted").build();
+        return Response.ok().entity("Person with id: " + id + " was successfully deleted").build();
     }
 
     @POST
