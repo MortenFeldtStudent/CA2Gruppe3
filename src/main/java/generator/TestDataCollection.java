@@ -3,15 +3,18 @@ package generator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestData {
-    
+/**
+ * @author Morten
+ */
+public class TestDataCollection {
+
     private List<String> testDataCollection;
 
-    public TestData() {
+    public TestDataCollection() {
         testDataCollection = new ArrayList();
     }
-    
-    public void addTestData(String newTestData){
+
+    public void addTestData(String newTestData) {
         testDataCollection.add(newTestData);
     }
 
