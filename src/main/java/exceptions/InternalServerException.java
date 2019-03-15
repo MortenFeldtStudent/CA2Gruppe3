@@ -5,14 +5,15 @@
  */
 package exceptions;
 
+
 /**
  *
  * @author porse
  */
-public class InternalServerException extends ExceptionDTO {
+public class InternalServerException extends Exception {
     
-    public InternalServerException(Throwable ex, int code, boolean debug) {
-        super(ex, code, debug);
+    public InternalServerException(String message) {
+        super(message);
     }
     
 }

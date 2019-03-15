@@ -19,13 +19,15 @@ public class PersonDTO {
     private List<HobbyDTO> hobbyList;
 
     public PersonDTO(Person person) {
-        this.id = person.getId();
-        this.email = person.getEmail();
-        this.firstName = person.getFirstName();
-        this.lastName = person.getLastName();
-        this.phoneList = convertPhone(person.getPhones());
-        this.address = convertAddress(person.getAddress());
-        this.hobbyList = convertHobby(person.getHobbies());
+        if (person != null) {
+            this.id = person.getId();
+            this.email = person.getEmail();
+            this.firstName = person.getFirstName();
+            this.lastName = person.getLastName();
+            this.phoneList = convertPhone(person.getPhones());
+            this.address = convertAddress(person.getAddress());
+            this.hobbyList = convertHobby(person.getHobbies());
+        }
     }
 
     public PersonDTO(int id, String email, String firstName, String lastName, List<Phone> phones, Address address) {
@@ -44,7 +46,7 @@ public class PersonDTO {
         }
         return phoneDTOList;
     }
-    
+
     public List<HobbyDTO> convertHobby(List<Hobby> hobbies) {
         List<HobbyDTO> hobbiesDTO = new ArrayList();
         for (Hobby h : hobbies) {
@@ -52,7 +54,7 @@ public class PersonDTO {
         }
         return hobbiesDTO;
     }
-    
+
     public AddressDTO convertAddress(Address address) {
         return new AddressDTO(address);
     }
@@ -122,7 +124,7 @@ public class PersonDTO {
         personDTO = personDTO.replace("@4", this.email);
         return personDTO;
     }
-    
+
     public String toStringAll() {
         String personDTO = "@1: @2 @3 @4 @5";
         personDTO = personDTO.replace("@1", String.valueOf(this.id));
@@ -135,8 +137,8 @@ public class PersonDTO {
         personDTO = personDTO.replace("@8", this.address.getCityInfo().getCity());
         return personDTO;
     }
-    
-        public String toStringContactInfo() {
+
+    public String toStringContactInfo() {
         String personDTO = "@1: @2 @3 @4 @5 @6 @7 @8";
         personDTO = personDTO.replace("@1", this.firstName);
         personDTO = personDTO.replace("@2", this.lastName);

@@ -75,7 +75,12 @@ public class PersonFacade implements interfaces.IPersonFacade {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p WHERE p.id = :id");
         query.setParameter("id", personId);
-        PersonDTO p = (PersonDTO) query.getSingleResult();
+        PersonDTO p = null;
+        try {
+        p = (PersonDTO) query.getSingleResult();
+        } catch (Exception ex) {
+            throw new PersonNotFoundException("Person does not exist.");
+        }
         return p;
     }
 
