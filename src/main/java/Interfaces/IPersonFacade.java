@@ -44,18 +44,18 @@ public interface IPersonFacade {
     public PersonDTO postPersonWithAddressAndPhone(Person person, Phone phone, Address address, CityInfo city);
     
     //  GET id, firstName, lastName, email, addresse, phone
-     public List<PersonDTO> getAllPersonsContactInfo();
+    public List<PersonDTO> getAllPersonsContactInfo();
     
     // GET id, firstName, lastName, email, address, phone 
-     public PersonDTO getSinglePersonContactInfo(int id);
+    public PersonDTO getSinglePersonContactInfo(int id);
      
     // Returns error if the person does not exist. 
-     public void deletePersonById(int id) throws PersonNotFoundException;
+    public void deletePersonById(int id) throws PersonNotFoundException;
      
     // Takes firstName, lastName and email as input parameters.  
-     public PersonDTO editPerson(Person p);
+    public PersonDTO editPerson(Person p);
      
     // Get Person object by ID
-     public Person getPersonByIdToEdit(int personId) throws PersonNotFoundException;
+    public Person getPersonByIdToEdit(int personId) throws PersonNotFoundException;
     
 }

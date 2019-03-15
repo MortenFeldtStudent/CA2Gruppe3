@@ -295,5 +295,45 @@ public class PersonTest implements interfaces.IPersonTestFacade {
         Assert.assertEquals(expected, actual);
         
     }
-
+    
+    @Test
+    @Override
+    public void getSinglePersonContactInfoTest() {
+        //Arrange
+        int id = personList.get(0).getId();
+        PersonDTO personDTO = facade.getSinglePersonContactInfo(id);
+        //Act
+        int actual = personDTO.getId();
+        int expected = id;
+        //Assert
+        Assert.assertEquals(expected, actual);
+    }
+    
+    @Test
+    @Override
+    public void deletePersonByIdTest(){
+        //Arrange
+        int id = personList.get(0).getId();
+        facade.deletePersonById(id);
+        //Act
+        int actual = personList.size() - 1;
+        int expected = 7;
+        //Assert
+        Assert.assertEquals(expected, actual);
+    }
+    
+    @Test
+    @Override
+    public void editPersonTest(){
+        //Arrange
+        int id = personList.get(0).getId();
+        Person p = facade.getPersonByIdToEdit(id);
+        p.setEmail("TEST");
+        PersonDTO personDTO = facade.editPerson(p);
+        //Act
+        String actual = personDTO.getEmail();
+        String expected = "TEST";
+        //Assert
+        Assert.assertEquals(expected, actual);
+    }
 }

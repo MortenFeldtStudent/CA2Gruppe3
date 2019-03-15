@@ -42,6 +42,11 @@ public class PersonResource {
     public PersonResource() {
     }
 
+    /**
+     * A test that shows an error message, error code and the stacktrace.
+     * 
+     * @return exDTO(e, 406, true)
+     */
     @GET
     @Path("/test/ex")
     @Produces(MediaType.APPLICATION_JSON)
@@ -55,6 +60,12 @@ public class PersonResource {
 
     }
 
+    /**
+     * Retrieves a list with all persons and information build to json.
+     * 
+     * @return ok response and the list build as Json.
+     * @throws PersonNotFoundException
+     */
     @GET
     @Path("/all/complete")
     @Produces(MediaType.APPLICATION_JSON)
@@ -64,6 +75,12 @@ public class PersonResource {
 
     }
 
+    /**
+     * Retrieves all information of selected person by the Id parameter.
+     * 
+     * @param personId Specific person id - Int
+     * @return One person and belonging information.
+     */
     @GET
     @Path("/complete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -77,6 +94,11 @@ public class PersonResource {
         return Response.ok().entity(gson.toJson(p)).build();
     }
 
+    /**
+     * Retrieves all persons and their contact information only.
+     * 
+     * @return A list of all persons with name, address, phone, email.
+     */
     @GET
     @Path("/all/contactinfo")
     @Produces(MediaType.APPLICATION_JSON)
@@ -86,6 +108,12 @@ public class PersonResource {
                 .entity(gson.toJson(allInfo)).build();
     }
 
+    /**
+     * Retrieves a person by the phone parameter.
+     * 
+     * @param phone Belonging to the desired person. - Int
+     * @return A person and all information.
+     */
     @GET
     @Path("/phone/{phonenumber}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -94,6 +122,12 @@ public class PersonResource {
         return Response.ok().entity(gson.toJson(person)).build();
     }
 
+    /**
+     * Retrieves a list of persons with a specific hobby.
+     * 
+     * @param hobby Name of hobby - String
+     * @return A list of persons and all belonging information.
+     */
     @GET
     @Path("/all/hobby/{hobby}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -102,6 +136,12 @@ public class PersonResource {
         return Response.ok().entity(gson.toJson(persons)).build();
     }
 
+    /**
+     * Retrieves a list of persons sorted by specific city.
+     * 
+     * @param city Name of city - String
+     * @return List of persons and all their information.
+     */
     @GET
     @Path("/all/city/{city}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -110,6 +150,12 @@ public class PersonResource {
         return Response.ok().entity(gson.toJson(persons)).build();
     }
 
+    /**
+     * Retrieves a single person and all contact information.
+     * 
+     * @param personId Specific personId - Int
+     * @return One person and all contact info(Name, email, address, phone)
+     */
     @GET
     @Path("/contactinfo/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -117,6 +163,12 @@ public class PersonResource {
         return Response.ok().entity(gson.toJson(pf.getSinglePersonContactInfo(personId))).build();
     }
 
+    /**
+     * Counts how many persons there are for a given hobby.
+     * 
+     * @param hobby Name of hobby
+     * @return Integer of how many persons for a hobby.
+     */
     @GET
     @Path("/count/{hobby}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -125,6 +177,12 @@ public class PersonResource {
         return Response.ok().entity(gson.toJson(count)).build();
     }
 
+    /**
+     * Removes a person and all belonging information.
+     * 
+     * @param id Id for the person that is to be removed.
+     * @return Ok response and Id for the deleted person.
+     */
     @DELETE
     @Path("/delete/{id}")
     public Response deletePersonById(@PathParam("id") int id) {
@@ -136,6 +194,19 @@ public class PersonResource {
         return Response.ok().entity("Person with id: " + id + " was successfully deleted").build();
     }
 
+    /**
+     * Adds a person with given personal information.
+     * 
+     * @param content Data in Json format.
+     * @param phonenumber - Phone number
+     * @param pdescription - Phone description
+     * @param street - Name of street and number
+     * @param sinfo - Type of street
+     * @param zipcode - Zipcode of city
+     * @param cityname - Name of city
+     * @return Builds the information.
+     * @throws InputException - If the given information is invalid ie. letters instead of numbers.
+     */
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -160,6 +231,14 @@ public class PersonResource {
         return Response.ok().entity(gson.toJson(person)).build();
     }
 
+    /**
+     * Used to edit information on an existing person.
+     * 
+     * @param content Data in Json format
+     * @param id Person id
+     * @return The edited person object.
+     * @throws PersonNotFoundException If the given id does not correlate to an existing person, the exception is thrown.
+     */
     @PUT
     @Path("/edit/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
