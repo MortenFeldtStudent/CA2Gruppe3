@@ -105,7 +105,13 @@ public class PersonDTO {
         this.address = address;
     }
 
-    
+    public List<HobbyDTO> getHobbyList() {
+        return hobbyList;
+    }
+
+    public void setHobbyList(List<HobbyDTO> hobbyList) {
+        this.hobbyList = hobbyList;
+    }
 
     @Override
     public String toString() {
@@ -118,7 +124,7 @@ public class PersonDTO {
     }
     
     public String toStringAll() {
-        String personDTO = "@1: @2 @3 @4 @5 @6 @7 @8";
+        String personDTO = "@1: @2 @3 @4 @5";
         personDTO = personDTO.replace("@1", String.valueOf(this.id));
         personDTO = personDTO.replace("@2", this.firstName);
         personDTO = personDTO.replace("@3", this.lastName);
