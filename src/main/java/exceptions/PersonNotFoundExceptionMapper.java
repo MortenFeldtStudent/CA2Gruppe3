@@ -7,7 +7,6 @@ package exceptions;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import static java.lang.System.err;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -26,7 +25,7 @@ public class PersonNotFoundExceptionMapper implements ExceptionMapper<PersonNotF
     public Response toResponse(PersonNotFoundException ex) {
 
         return Response.status(404)
-                .entity(gson.toJson(err))
+                .entity(gson.toJson(ex.getMessage()))
                 .type(MediaType.APPLICATION_JSON).
                 build();
     }
