@@ -8,6 +8,7 @@ import entity.CityInfo;
 import entity.Person;
 import entity.Phone;
 import exceptions.ExceptionDTO;
+import exceptions.PersonNotFoundException;
 import facade.PersonFacade;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
