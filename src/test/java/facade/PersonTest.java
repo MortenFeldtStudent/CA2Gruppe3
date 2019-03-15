@@ -195,7 +195,7 @@ public class PersonTest implements interfaces.IPersonTestFacade {
         List<PersonDTO> p = facade.getAllPersonsByCity(cityName);
         // Act
         String actual = cityName;
-        String expected = p.get(0).getAddress().getCityInfo().getCity();
+        String expected = "Lyngby";
         // Assert
         Assert.assertEquals(expected, actual);
 
@@ -246,9 +246,9 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     public void getAllPersonsAndInfoTest() {
         // Arrange
         List<PersonDTO> personList = facade.getAllPersonsAndInfo();
-        for (PersonDTO personDTO : personList) {
-            System.out.println(personDTO.toStringAll());
-        }
+//        for (PersonDTO personDTO : personList) {
+//            System.out.println(personDTO.toStringAll());
+//        }
         // Act
         int actual = personList.size();
         int expected = 4;
