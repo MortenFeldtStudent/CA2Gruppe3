@@ -162,6 +162,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         }
     }
     
+    @Override
     public Person getPersonByIdToEdit(int personId) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT p FROM Person p WHERE p.id = :id");
