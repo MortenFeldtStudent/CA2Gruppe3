@@ -159,20 +159,16 @@ public class PersonFacade implements interfaces.IPersonFacade {
         }
     }
     
-    public Person getPersonByIdToEdit(int personId) {
+    public Person getPersonByIdToEdit(int personId) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT p FROM Person p WHERE p.id = :id");
         query.setParameter("id", personId);
-        Person p = (Person) query.getSingleResult();
+        Person p = null;
+        try {
+         p = (Person) query.getSingleResult();
+        } catch (Exception ex) {
+            throw new PersonNotFoundException("Person with id: '" + personId + "' does not exist.");
+        }
         return p;
     }
-
-//    public static void main(String[] args) {
-//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
-//        PersonFacade pf = new PersonFacade(emf);
-//        List<PersonDTO> persons = pf.getAllPersonsContactInfo();
-//        for (PersonDTO person : persons) {
-//            System.out.println(person.toStringContactInfo());
-//        }
-//    }
 }
