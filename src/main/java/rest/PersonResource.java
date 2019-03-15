@@ -1,6 +1,7 @@
 package rest;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dto.PersonDTO;
 import entity.Address;
 import entity.CityInfo;
@@ -23,7 +24,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -35,7 +35,7 @@ public class PersonResource {
 
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
     PersonFacade pf = new PersonFacade(emf);
-    Gson gson = new Gson();
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public PersonResource() {
     }
@@ -72,8 +72,8 @@ public class PersonResource {
         PersonDTO p = null;
         try {
             p = pf.getPersonByID(personId);
-        } catch (PersonNotFoundException ex) {
-            throw new PersonNotFoundException("Person does not exist.");
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
         return Response.ok().entity(gson.toJson(p)).build();
     }
