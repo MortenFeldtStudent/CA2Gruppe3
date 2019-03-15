@@ -142,13 +142,13 @@ public class PersonFacade implements interfaces.IPersonFacade {
         }
     }
     
-    public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
-        PersonFacade pf = new PersonFacade(emf);
-        List<PersonDTO> persons = pf.getAllPersonsContactInfo();
-        for (PersonDTO person : persons) {
-            System.out.println(person.toStringContactInfo());
-        }
-    }
+//    public static void main(String[] args) {
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
+//        PersonFacade pf = new PersonFacade(emf);
+//        List<PersonDTO> persons = pf.getAllPersonsContactInfo();
+//        for (PersonDTO person : persons) {
+//            System.out.println(person.toStringContactInfo());
+//        }
+//    }
 
 }
