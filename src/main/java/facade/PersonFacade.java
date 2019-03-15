@@ -121,6 +121,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         return personDTOs;
     }
 
+    @Override
     public PersonDTO getSinglePersonContactInfo(int id) {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT (p) FROM Person p WHERE p.id = :id");
@@ -128,6 +129,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         return (PersonDTO) query.getSingleResult();
     }
 
+    @Override
     public void deletePersonById(int id) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         Person person = null;
@@ -146,6 +148,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         }
     }
     
+    @Override
     public PersonDTO editPerson(Person p){
         EntityManager em = emf.createEntityManager();
 
@@ -159,20 +162,17 @@ public class PersonFacade implements interfaces.IPersonFacade {
         }
     }
     
-    public Person getPersonByIdToEdit(int personId) {
+    @Override
+    public Person getPersonByIdToEdit(int personId) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT p FROM Person p WHERE p.id = :id");
         query.setParameter("id", personId);
-        Person p = (Person) query.getSingleResult();
+        Person p = null;
+        try {
+         p = (Person) query.getSingleResult();
+        } catch (Exception ex) {
+            throw new PersonNotFoundException("Person with id: " + personId + " does not exist.");
+        }
         return p;
     }
-
-//    public static void main(String[] args) {
-//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
-//        PersonFacade pf = new PersonFacade(emf);
-//        List<PersonDTO> persons = pf.getAllPersonsContactInfo();
-//        for (PersonDTO person : persons) {
-//            System.out.println(person.toStringContactInfo());
-//        }
-//    }
 }

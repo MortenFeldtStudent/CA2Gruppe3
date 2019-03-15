@@ -8,6 +8,7 @@ import entity.CityInfo;
 import entity.Person;
 import entity.Phone;
 import exceptions.ExceptionDTO;
+import exceptions.InputException;
 import exceptions.PersonNotFoundException;
 import facade.PersonFacade;
 import java.util.List;
@@ -88,7 +89,7 @@ public class PersonResource {
         try {
             p = pf.getPersonByID(personId);
         } catch (PersonNotFoundException ex) {
-            return Response.ok().entity(gson.toJson(ex.getMessage())).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson(ex.getMessage())).build();
         }
         return Response.ok().entity(gson.toJson(p)).build();
     }
@@ -180,11 +181,11 @@ public class PersonResource {
     @Path("/delete/{id}")
     public Response deletePersonById(@PathParam("id") int id) {
         try {
-        pf.deletePersonById(id);
+            pf.deletePersonById(id);
         } catch (PersonNotFoundException ex) {
-            return Response.ok().entity(gson.toJson(ex.getMessage())).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson(ex.getMessage())).build();
         }
-        return Response.ok().entity("Person with id: '" + id + "' was successfully deleted").build();
+        return Response.ok().entity("Person with id: " + id + " was successfully deleted").build();
     }
 
     @POST
@@ -196,26 +197,42 @@ public class PersonResource {
             @QueryParam("street") String street,
             @QueryParam("sinfo") String sinfo,
             @QueryParam("zipcode") String zipcode,
-            @QueryParam("city") String cityname) {
-
-        Phone phone = new Phone(phonenumber, pdescription);
-        Address address = new Address(street, sinfo);
-        CityInfo city = new CityInfo(zipcode, cityname);
-
+            @QueryParam("city") String cityname) throws InputException {
+        Phone phone = null;
+        Address address = null;
+        CityInfo city = null;
+        try {
+            phone = new Phone(phonenumber, pdescription);
+            address = new Address(street, sinfo);
+            city = new CityInfo(zipcode, cityname);
+        } catch (Exception ex) {
+            throw new InputException("One or more inputs are not correct.");
+        }
         PersonDTO person = pf.postPersonWithAddressAndPhone(gson.fromJson(content, Person.class), phone, address, city);
         return Response.ok().entity(gson.toJson(person)).build();
     }
-    
+
     @PUT
     @Path("/edit/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editPerson( String content, @PathParam("id") int id) throws PersonNotFoundException{
+    public Response editPerson(String content, @PathParam("id") int id) throws PersonNotFoundException {
         Person newPerson = gson.fromJson(content, Person.class);
-        Person person = pf.getPersonByIdToEdit(id);
-        if(newPerson.getFirstName() != null) person.setFirstName(newPerson.getFirstName());
-        if(newPerson.getLastName() != null) person.setLastName(newPerson.getLastName());
-        if(newPerson.getEmail() != null) person.setEmail(newPerson.getEmail());
+        Person person = null;
+        try {
+        person = pf.getPersonByIdToEdit(id);
+        } catch (PersonNotFoundException ex) {
+            return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson(ex.getMessage())).build();
+        }
+        if (newPerson.getFirstName() != null) {
+            person.setFirstName(newPerson.getFirstName());
+        }
+        if (newPerson.getLastName() != null) {
+            person.setLastName(newPerson.getLastName());
+        }
+        if (newPerson.getEmail() != null) {
+            person.setEmail(newPerson.getEmail());
+        }
         return Response.ok().entity(gson.toJson(pf.editPerson(person))).build();
     }
 

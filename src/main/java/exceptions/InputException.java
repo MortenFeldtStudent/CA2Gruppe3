@@ -10,9 +10,9 @@ package exceptions;
  *
  * @author porse
  */
-public class InternalServerException extends Exception {
+public class InputException extends Exception {
     
-    public InternalServerException(String message) {
+    public InputException(String message) {
         super(message);
     }
     
