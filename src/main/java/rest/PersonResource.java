@@ -74,10 +74,6 @@ public class PersonResource {
             p = pf.getPersonByID(personId);
         } catch (PersonNotFoundException ex) {
             throw new PersonNotFoundException("Person does not exist.");
-        } catch (WebApplicationException ex) {
-            if (ex.) {
-                
-            }
         }
         return Response.ok().entity(gson.toJson(p)).build();
     }
