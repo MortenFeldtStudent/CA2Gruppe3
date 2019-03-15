@@ -8,6 +8,29 @@
     <packaging>war</packaging>
 
     <name>Week-7-Course-Assignment-2</name>
+    
+    <profiles>
+        <profile>
+            <id>deployremote</id>
+            <build>
+                <plugins>
+                    <plugin>   
+                        <groupId>org.apache.tomcat.maven</groupId>  
+                        <artifactId>tomcat7-maven-plugin</artifactId>  
+                        <version>2.2</version>  
+                        <configuration>
+                            <url>https://www.mortenfeldtstudent.dk/manager/text</url>  
+                            <server>TomcatServer</server>  
+                            <path>/CA2Gruppe3</path>  
+                            <username>admin</username>  
+                            <password>Morten123</password>
+                            <update>true</update>  
+                        </configuration>
+                    </plugin> 
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
