@@ -142,6 +142,27 @@ public class PersonFacade implements interfaces.IPersonFacade {
         }
     }
     
+    public PersonDTO editPerson(Person p){
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            em.merge(p);
+            em.getTransaction().commit();
+            return new PersonDTO(p);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Person getPersonByIdToEdit(int personId) {
+        EntityManager em = emf.createEntityManager();
+        Query query = em.createQuery("SELECT p FROM Person p WHERE p.id = :id");
+        query.setParameter("id", personId);
+        Person p = (Person) query.getSingleResult();
+        return p;
+    }
+    
 //    public static void main(String[] args) {
 //        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
 //        PersonFacade pf = new PersonFacade(emf);

@@ -21,6 +21,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -155,6 +156,19 @@ public class PersonResource {
 
         PersonDTO person = pf.postPersonWithAddressAndPhone(gson.fromJson(content, Person.class), phone, address, city);
         return Response.ok().entity(gson.toJson(person)).build();
+    }
+    
+    @PUT
+    @Path("/edit/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPerson( String content, @PathParam("id") int id) throws PersonNotFoundException{
+        Person newPerson = gson.fromJson(content, Person.class);
+        Person person = pf.getPersonByIdToEdit(id);
+        if(newPerson.getFirstName() != null) person.setFirstName(newPerson.getFirstName());
+        if(newPerson.getLastName() != null) person.setLastName(newPerson.getLastName());
+        if(newPerson.getEmail() != null) person.setEmail(newPerson.getEmail());
+        return Response.ok().entity(gson.toJson(pf.editPerson(person))).build();
     }
 
 }
