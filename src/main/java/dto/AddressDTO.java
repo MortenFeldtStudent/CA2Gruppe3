@@ -14,7 +14,6 @@ import entity.CityInfo;
  */
 public class AddressDTO {
 
-    private int id;
     private String street;
     private String info;
     private CityInfo cityInfo;
@@ -22,15 +21,6 @@ public class AddressDTO {
     public AddressDTO(Address address) {
         this.street = address.getStreet();
         this.info = address.getInfo();
-        this.cityInfo = address.getCity();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getStreet() {
@@ -57,4 +47,11 @@ public class AddressDTO {
         this.cityInfo = cityInfo;
     }
 
+    
+    @Override
+    public String toString() {
+        return "street=" + street + ", info=" + info + ", zipcode=" + cityInfo.getZipCode() + ", city=" + cityInfo.getCity();
+    }
+
+    
 }

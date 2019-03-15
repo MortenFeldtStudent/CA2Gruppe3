@@ -13,21 +13,12 @@ import entity.Phone;
  */
 class PhoneDTO {
 
-    private int id;
     private int number;
     private String description;
 
     public PhoneDTO(Phone phone) {
         this.number = phone.getNumber();
         this.description = phone.getDescription();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getNumber() {

@@ -97,13 +97,22 @@ public class PersonDTO {
         this.phoneList.add(phone);
     }
 
-    public Address getAddress() {
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressDTO address) {
         this.address = address;
     }
+
+    public List<HobbyDTO> getHobbyList() {
+        return hobbyList;
+    }
+
+    public void setHobbyList(List<HobbyDTO> hobbyList) {
+        this.hobbyList = hobbyList;
+    }
+
 
     @Override
     public String toString() {
@@ -116,15 +125,12 @@ public class PersonDTO {
     }
     
     public String toStringAll() {
-        String personDTO = "@1: @2 @3 @4 @5 @6 @7 @8";
+        String personDTO = "@1: @2 @3 @4 @5";
         personDTO = personDTO.replace("@1", String.valueOf(this.id));
         personDTO = personDTO.replace("@2", this.firstName);
         personDTO = personDTO.replace("@3", this.lastName);
         personDTO = personDTO.replace("@4", this.email);
-        personDTO = personDTO.replace("@5", this.address.getStreet());
-        personDTO = personDTO.replace("@6", this.address.getInfo());
-        personDTO = personDTO.replace("@7", this.address.getCity().getZipCode());
-        personDTO = personDTO.replace("@8", this.address.getCity().getCity());
+        personDTO = personDTO.replace("@5", this.address.toString());
         return personDTO;
     }
     
@@ -133,11 +139,8 @@ public class PersonDTO {
         personDTO = personDTO.replace("@1", this.firstName);
         personDTO = personDTO.replace("@2", this.lastName);
         personDTO = personDTO.replace("@3", this.email);
-        personDTO = personDTO.replace("@4", this.address.getStreet());
-        personDTO = personDTO.replace("@5", this.address.getInfo());
-        personDTO = personDTO.replace("@6", this.address.getCity().getZipCode());
-        personDTO = personDTO.replace("@7", this.address.getCity().getCity());
-        personDTO = personDTO.replace("@8", this.phoneList.toString());
+        personDTO = personDTO.replace("@4", this.phoneList.toString());
+        personDTO = personDTO.replace("@5", this.address.toString());
         return personDTO;
     }
 

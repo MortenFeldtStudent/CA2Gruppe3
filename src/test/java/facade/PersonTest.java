@@ -195,7 +195,7 @@ public class PersonTest implements interfaces.IPersonTestFacade {
         List<PersonDTO> p = facade.getAllPersonsByCity(cityName);
         // Act
         String actual = cityName;
-        String expected = p.get(0).getAddress().getCity().getCity();
+        String expected = p.get(0).getAddress().getCityInfo().getCity();
         // Assert
         Assert.assertEquals(expected, actual);
 
