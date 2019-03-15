@@ -4,164 +4,174 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @author Morten
+ */
 public class Generator {
-    
+
     private final Random random = new Random();
 
-    private final TestData testData = new TestData();
+    private final TestDataCollection testData = new TestDataCollection();
 
-    private final List<Integer> testDataGeneratePhone = new ArrayList();
-    
+    private final List<Integer> testDataGeneratePhoneNumbers = new ArrayList();
+    private final List<PhoneTestData> testDataGeneratePhone = new ArrayList();
+    private final List<AddressTestData> testDataGenerateAddress = new ArrayList();
+    private final List<HobbyTestData> testDataGenerateHobby = new ArrayList();
+    private final List<PersonTestData> testDataGeneratePerson = new ArrayList();
+    private final List<HobbyPersonTestData> testDataGenerateHobbyPerson = new ArrayList();
+    private final List<ZipCodesTestData> testDataGenerateZipCodes = new ArrayList();
+
     private final int[] arrInt = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-    public TestData generate(int countSample) {
+    public TestDataCollection generate(int countSample, int countZipCodesInSQL) {
+
+        int countPhone = (int) (countSample * 1.5); //3000 - 2000 Personer
+        int countAddress = (int) (countSample * 0.75); //1500 - 2000 Personer
+        int countHobby = countSample;
+
+        //Used for AddressID
+        int i = 1;
+        int countTempAddress = countAddress;
+
+        //Used for AddressID
+        int j = 1;
+        int countTempPhone = countPhone;
 
         //Generating PhoneNumbers in List
-        generateListInt(countSample);
+        generateListPhoneNumbers(countPhone);
+        generateListPhone(countPhone);
+        generateListAddress(countAddress, countZipCodesInSQL);
+        generateListHobby(countHobby);
+        generateListPerson(countSample);
+        generateListHobbyPerson(countSample);
 
-        //City
-        //See ZipCode SQL file in CA2 Exercise
-        
-        //Address
-        for (int i = 1; i <= countSample; i++) {
-            String info = "AddressInfo" + i;
-            String street = "AddressStreet" + i;
-            int city_id = i;
-            String sql = "INSERT INTO ADDRESS (INFO,STREET,FK_City) VALUES "
+        for (ZipCodesTestData zipCodesTestData : testDataGenerateZipCodes) {
+            String sql = "INSERT INTO CITYINFO (ZIPCODE, CITY) VALUES "
                     + "("
-                    + "'" + info + "',"
-                    + "'" + street + "',"
-                    + city_id
+                    + "'" + zipCodesTestData.getZipCode() + "',"
+                    + "'" + zipCodesTestData.getCity() + "'"
                     + ");";
             testData.addTestData(sql);
         }
-        //Address
-        for (int i = 1; i <= countSample; i++) {
-            if (i % 4 == 0) {
-            String info = "AddressInfo" + i + i;
-            String street = "AddressStreet" + i + i;
-            int city_id = i;
+        for (AddressTestData address : testDataGenerateAddress) {
             String sql = "INSERT INTO ADDRESS (INFO,STREET,FK_City) VALUES "
                     + "("
-                    + "'" + info + "',"
-                    + "'" + street + "',"
-                    + city_id
+                    + "'" + address.getInfo() + "',"
+                    + "'" + address.getStreet() + "',"
+                    + address.getCity_id()
                     + ");";
             testData.addTestData(sql);
-            }
         }
-        //Hobby
-        for (int i = 1; i <= countSample; i++) {
-            String descriptionHobby = "HobbyDescription" + i;
-            String name = "HobbyName" + i;
+        for (HobbyTestData hobby : testDataGenerateHobby) {
             String sql = "INSERT INTO HOBBY (DESCRIPTION,NAME) VALUES "
                     + "("
-                    + "'" + descriptionHobby + "',"
-                    + "'" + name + "'"
+                    + "'" + hobby.getDescription() + "',"
+                    + "'" + hobby.getName() + "'"
                     + ");";
             testData.addTestData(sql);
         }
-        //Person
-        for (int i = 1; i <= countSample; i++) {
-            String email = "PersonEmail" + i;
-            String fName = "PersonFirstName" + i;
-            String lName = "PersonLastName" + i;
-            int address_id = i;
+        for (PersonTestData person : testDataGeneratePerson) {
+            if (i > countTempAddress) {
+                i = 1;
+            }
+
             String sql = "INSERT INTO PERSON (EMAIL,FIRSTNAME,LASTNAME,FK_Address) VALUES "
                     + "("
-                    + "'" + email + "',"
-                    + "'" + fName + "',"
-                    + "'" + lName + "',"
-                    + address_id
+                    + "'" + person.getEmail() + "',"
+                    + "'" + person.getfName() + "',"
+                    + "'" + person.getlName() + "',"
+                    + i
                     + ");";
             testData.addTestData(sql);
+            i += 1;
         }
-        //Person
-        for (int i = 1; i <= countSample; i++) {
-            if (i % 4 == 0) {
-                String email = "PersonEmail" + i + i;
-                String fName = "PersonFirstName" + i + i;
-                String lName = "PersonLastName" + i + i;
-                int address_id = i;
-                String sql = "INSERT INTO PERSON (EMAIL,FIRSTNAME,LASTNAME,FK_Address) VALUES "
-                        + "("
-                        + "'" + email + "',"
-                        + "'" + fName + "',"
-                        + "'" + lName + "',"
-                        + address_id
-                        + ");";
-                testData.addTestData(sql);
+        for (PhoneTestData phone : testDataGeneratePhone) {
+            if (j > countSample) {
+                j = 1;
             }
-        }
-        //Phone
-        for (int i = 1; i <= countSample; i++) {
-            String descriptionPhone = "PhoneDescription" + i;
-            int number = testDataGeneratePhone.remove(0);
-            int person_id_phone = i;
+
             String sql = "INSERT INTO PHONE (DESCRIPTION,NUMBER,PERSON_ID) VALUES "
                     + "("
-                    + "'" + descriptionPhone + "',"
-                    + number + ","
-                    + person_id_phone
+                    + "'" + phone.getDescription() + "',"
+                    + phone.getNumber() + ","
+                    + j
                     + ");";
             testData.addTestData(sql);
+            j += 1;
         }
-        //Phone
-        for (int i = 1; i <= countSample; i++) {
-            if (i % 4 == 0) {
-                String descriptionPhone = "PhoneDescription" + i + i;
-                int number = testDataGeneratePhone.remove(0);
-                int person_id_phone = i;
-                String sql = "INSERT INTO PHONE (DESCRIPTION,NUMBER,PERSON_ID) VALUES "
-                        + "("
-                        + "'" + descriptionPhone + "',"
-                        + number + ","
-                        + person_id_phone
-                        + ");";
-                testData.addTestData(sql);
-            }
-        }
-        //Hobby_Person
-        for (int i = 1; i <= countSample; i++) {
-            int hobby_id = i;
-            int person_id_hobby_person = i;
+        for (HobbyPersonTestData hobby_Person : testDataGenerateHobbyPerson) {
             String sql = "INSERT INTO PERSON_HOBBY (hobbies_ID,persons_ID) VALUES "
                     + "("
-                    + hobby_id + ","
-                    + person_id_hobby_person
+                    + hobby_Person.getHobby_id() + ","
+                    + hobby_Person.getPerson_id()
                     + ");";
             testData.addTestData(sql);
-            //Rest %2 = 0
-            if (i % 2 == 0) {
-                hobby_id = i;
-                person_id_hobby_person = i - 1;
-                sql = "INSERT INTO PERSON_HOBBY (hobbies_ID,persons_ID) VALUES "
-                        + "("
-                        + hobby_id + ","
-                        + person_id_hobby_person
-                        + ");";
-                testData.addTestData(sql);
-            }
-            //Rest %4 = 0
-            if (i % 4 == 0) {
-                if (i <= countSample) {
-                    hobby_id = i + 1;
-                }
-                person_id_hobby_person = i - 1;
-                sql = "INSERT INTO PERSON_HOBBY (hobbies_ID,persons_ID) VALUES "
-                        + "("
-                        + hobby_id + ","
-                        + person_id_hobby_person
-                        + ");";
-                testData.addTestData(sql);
-            }
         }
 
         return testData;
     }
 
-    public void generateListInt(int countSample) {
-        int totalCountSample = countSample * 10;
+    //Methods to generating PhoneTestData in list--------
+    public void generateListPhone(int countPhone) {
+        for (int i = 1; i <= countPhone; i++) {
+            String descriptionPhone = "PhoneDescription" + i;
+            int number = testDataGeneratePhoneNumbers.remove(0);
+            testDataGeneratePhone.add(new PhoneTestData(descriptionPhone, number));
+        }
+    }
+
+    //Methods to generating AddressTestData in list--------
+    public void generateListAddress(int countAddress, int countZipCodesInSQL) {
+        for (int i = 1; i <= countAddress; i++) {
+            String info = "AddressInfo" + i;
+            String street = "AddressStreet" + i;
+            testDataGenerateAddress.add(new AddressTestData(info, street, findRandomCityID(countZipCodesInSQL)));
+        }
+    }
+
+    //Methods to generating HobbyTestData in list--------
+    public void generateListHobby(int countHobby) {
+        for (int i = 1; i <= countHobby; i++) {
+            String descriptionHobby = "HobbyDescription" + i;
+            String name = "HobbyName" + i;
+            testDataGenerateHobby.add(new HobbyTestData(descriptionHobby, name));
+        }
+    }
+
+    //Methods to generating PersonTestData in list--------
+    public void generateListPerson(int countSample) {
+        for (int i = 1; i <= countSample; i++) {
+            String email = "PersonEmail" + i;
+            String fName = "PersonFirstName" + i;
+            String lName = "PersonLastName" + i;
+            testDataGeneratePerson.add(new PersonTestData(email, fName, lName));
+        }
+    }
+
+    //Methods to generating HobbyPersonTestData in list--------
+    public void generateListHobbyPerson(int countSample) {
+        for (int i = 1; i <= countSample; i++) {
+            int hobby_id = i;
+            int person_id = i;
+            testDataGenerateHobbyPerson.add(new HobbyPersonTestData(hobby_id, person_id));
+
+            if (i % 2 == 0 && i != countSample) {
+                hobby_id = i;
+                person_id = i - 1;
+                testDataGenerateHobbyPerson.add(new HobbyPersonTestData(hobby_id, person_id));
+            }
+
+            if (i % 4 == 0 && i != countSample) {
+                hobby_id = i + 1;
+                person_id = i - 1;
+                testDataGenerateHobbyPerson.add(new HobbyPersonTestData(hobby_id, person_id));
+            }
+        }
+    }
+
+    //Methods to generating PhoneNumbers in list--------START
+    public void generateListPhoneNumbers(int countPhone) {
+        int totalCountSample = countPhone;
         int value = findRandomInt(arrInt);
 
         for (int i = 0; i < totalCountSample; i++) {
@@ -182,14 +192,1381 @@ public class Generator {
 
     public boolean addStringToList(int phoneNumber) {
         while (!isIntInList(phoneNumber)) {
-            testDataGeneratePhone.add(phoneNumber);
+            testDataGeneratePhoneNumbers.add(phoneNumber);
             return true;
         }
         return false;
     }
 
     public boolean isIntInList(int phoneNumber) {
-        return testDataGeneratePhone.contains(phoneNumber);
+        return testDataGeneratePhoneNumbers.contains(phoneNumber);
+    }
+    //Methods to generating PhoneNumbers in list--------END
+
+    //Method to generating random CityInfo ID
+    public int findRandomCityID(int countZipCodesInSQL) {
+        return random.nextInt(countZipCodesInSQL) + 1;
+    }
+
+    //Method to give amount of ZipCodes
+    public int amountOfZipCodes() {
+        return testDataGenerateZipCodes.size();
+    }
+
+    //Method to initialize ZipCodes and City
+    public void initializeZipCodesAndCity() {
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0555", "Scanning"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0800", "Høje Taastrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0877", "København C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0892", "Sjælland USF P"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0893", "Sjælland USF B"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0894", "Udbetaling"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0897", "eBrevsprækken"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0899", "Kommuneservice"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0900", "København C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0910", "København C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0917", "Københavns Pakkecenter"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0918", "Københavns Pakke BRC"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0919", "Returprint BRC"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0929", "København C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("0960", "Internationalt Postcenter"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("999", "København C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1000", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1001", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1002", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1003", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1004", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1005", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1006", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1007", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1008", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1009", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1010", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1011", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1012", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1013", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1014", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1015", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1016", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1017", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1018", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1019", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1020", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1021", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1022", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1023", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1024", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1025", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1026", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1045", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1050", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1051", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1052", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1053", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1054", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1055", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1056", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1057", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1058", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1059", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1060", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1061", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1062", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1063", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1064", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1065", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1066", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1067", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1068", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1069", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1070", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1071", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1072", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1073", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1074", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1092", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1093", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1095", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1098", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1100", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1101", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1102", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1103", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1104", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1105", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1106", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1107", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1110", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1111", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1112", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1113", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1114", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1115", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1116", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1117", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1118", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1119", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1120", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1121", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1122", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1123", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1124", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1125", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1126", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1127", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1128", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1129", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1130", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1131", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1140", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1147", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1148", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1150", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1151", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1152", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1153", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1154", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1155", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1156", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1157", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1158", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1159", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1160", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1161", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1162", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1163", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1164", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1165", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1166", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1167", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1168", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1169", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1170", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1171", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1172", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1173", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1174", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1175", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1200", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1201", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1202", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1203", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1204", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1205", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1206", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1207", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1208", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1209", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1210", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1211", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1212", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1213", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1214", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1215", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1216", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1217", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1218", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1219", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1220", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1221", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1240", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1250", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1251", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1252", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1253", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1254", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1255", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1256", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1257", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1258", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1259", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1260", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1261", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1263", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1264", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1265", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1266", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1267", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1268", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1270", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1271", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1291", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1300", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1301", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1302", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1303", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1304", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1306", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1307", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1308", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1309", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1310", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1311", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1312", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1313", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1314", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1315", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1316", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1317", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1318", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1319", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1320", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1321", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1322", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1323", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1324", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1325", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1326", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1327", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1328", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1329", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1350", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1352", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1353", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1354", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1355", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1356", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1357", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1358", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1359", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1360", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1361", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1362", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1363", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1364", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1365", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1366", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1367", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1368", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1369", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1370", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1371", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1400", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1401", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1402", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1403", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1404", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1406", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1407", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1408", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1409", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1410", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1411", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1412", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1413", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1414", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1415", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1416", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1417", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1418", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1419", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1420", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1421", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1422", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1423", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1424", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1425", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1426", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1427", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1428", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1429", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1430", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1431", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1432", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1433", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1434", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1435", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1436", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1437", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1438", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1439", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1440", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1441", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1448", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1450", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1451", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1452", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1453", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1454", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1455", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1456", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1457", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1458", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1459", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1460", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1461", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1462", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1463", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1464", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1465", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1466", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1467", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1468", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1470", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1471", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1472", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1473", "København K"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1500", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1501", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1502", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1503", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1504", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1505", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1506", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1507", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1508", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1509", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1510", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1512", "Returpost"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1513", "Centraltastning"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1532", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1533", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1550", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1551", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1552", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1553", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1554", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1555", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1556", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1557", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1558", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1559", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1560", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1561", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1562", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1563", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1564", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1566", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1567", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1568", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1569", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1570", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1571", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1572", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1573", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1574", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1575", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1576", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1577", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1592", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1599", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1600", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1601", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1602", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1603", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1604", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1605", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1606", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1607", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1608", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1609", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1610", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1611", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1612", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1613", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1614", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1615", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1616", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1617", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1618", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1619", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1620", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1621", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1622", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1623", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1624", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1630", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1631", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1632", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1633", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1634", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1635", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1650", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1651", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1652", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1653", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1654", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1655", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1656", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1657", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1658", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1659", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1660", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1661", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1662", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1663", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1664", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1665", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1666", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1667", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1668", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1669", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1670", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1671", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1672", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1673", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1674", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1675", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1676", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1677", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1699", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1700", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1701", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1702", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1703", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1704", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1705", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1706", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1707", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1708", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1709", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1710", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1711", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1712", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1713", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1714", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1715", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1716", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1717", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1718", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1719", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1720", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1721", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1722", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1723", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1724", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1725", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1726", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1727", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1728", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1729", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1730", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1731", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1732", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1733", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1734", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1735", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1736", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1737", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1738", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1739", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1749", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1750", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1751", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1752", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1753", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1754", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1755", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1756", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1757", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1758", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1759", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1760", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1761", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1762", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1763", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1764", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1765", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1766", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1770", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1771", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1772", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1773", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1774", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1775", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1777", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1780", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1782", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1785", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1786", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1787", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1790", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1799", "København V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1800", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1801", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1802", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1803", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1804", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1805", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1806", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1807", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1808", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1809", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1810", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1811", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1812", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1813", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1814", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1815", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1816", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1817", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1818", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1819", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1820", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1822", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1823", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1824", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1825", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1826", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1827", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1828", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1829", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1835", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1850", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1851", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1852", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1853", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1854", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1855", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1856", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1857", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1860", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1861", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1862", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1863", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1864", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1865", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1866", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1867", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1868", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1870", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1871", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1872", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1873", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1874", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1875", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1876", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1877", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1878", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1879", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1900", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1901", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1902", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1903", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1904", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1905", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1906", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1908", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1909", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1910", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1911", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1912", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1913", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1914", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1915", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1916", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1917", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1920", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1921", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1922", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1923", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1924", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1925", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1926", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1927", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1928", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1931", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1950", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1951", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1952", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1953", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1954", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1955", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1956", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1957", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1958", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1959", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1960", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1961", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1962", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1963", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1964", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1965", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1966", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1967", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1970", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1971", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1972", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1973", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("1974", "Frederiksberg C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2000", "Frederiksberg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2100", "København Ø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2150", "Nordhavn"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2200", "København N"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2300", "København S"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2400", "København NV"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2450", "København SV"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2500", "Valby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2600", "Glostrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2605", "Brøndby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2610", "Rødovre"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2620", "Albertslund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2625", "Vallensbæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2630", "Taastrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2635", "Ishøj"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2640", "Hedehusene"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2650", "Hvidovre"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2660", "Brøndby Strand"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2665", "Vallensbæk Strand"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2670", "Greve"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2680", "Solrød Strand"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2690", "Karlslunde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2700", "Brønshøj"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2720", "Vanløse"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2730", "Herlev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2740", "Skovlunde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2750", "Ballerup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2760", "Måløv"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2765", "Smørum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2770", "Kastrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2791", "Dragør"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2800", "Kongens Lyngby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2820", "Gentofte"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2830", "Virum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2840", "Holte"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2850", "Nærum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2860", "Søborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2870", "Dyssegård"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2880", "Bagsværd"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2900", "Hellerup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2920", "Charlottenlund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2930", "Klampenborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2942", "Skodsborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2950", "Vedbæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2960", "Rungsted Kyst"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2970", "Hørsholm"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2980", "Kokkedal"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2990", "Nivå"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3000", "Helsingør"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3050", "Humlebæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3060", "Espergærde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3070", "Snekkersten"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3080", "Tikøb"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3100", "Hornbæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3120", "Dronningmølle"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3140", "Ålsgårde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3150", "Hellebæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3200", "Helsinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3210", "Vejby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3220", "Tisvildeleje"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3230", "Græsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3250", "Gilleleje"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3300", "Frederiksværk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3310", "Ølsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3320", "Skævinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3330", "Gørløse"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3360", "Liseleje"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3370", "Melby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3390", "Hundested"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3400", "Hillerød"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3450", "Allerød"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3460", "Birkerød"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3480", "Fredensborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3490", "Kvistgård"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3500", "Værløse"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3520", "Farum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3540", "Lynge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3550", "Slangerup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3600", "Frederikssund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3630", "Jægerspris"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3650", "Ølstykke"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3660", "Stenløse"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3670", "Veksø Sjælland"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3700", "Rønne"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3720", "Aakirkeby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3730", "Nexø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3740", "Svaneke"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3751", "Østermarie"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3760", "Gudhjem"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3770", "Allinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3782", "Klemensker"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3790", "Hasle"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4000", "Roskilde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4030", "Tune"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4040", "Jyllinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4050", "Skibby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4060", "Kirke Såby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4070", "Kirke Hyllinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4100", "Ringsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4129", "Ringsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4130", "Viby Sjælland"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4140", "Borup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4160", "Herlufmagle"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4171", "Glumsø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4173", "Fjenneslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4174", "Jystrup Midtsj"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4180", "Sorø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4190", "Munke Bjergby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4200", "Slagelse"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4220", "Korsør"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4230", "Skælskør"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4241", "Vemmelev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4242", "Boeslunde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4243", "Rude"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4250", "Fuglebjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4261", "Dalmose"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4262", "Sandved"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4270", "Høng"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4281", "Gørlev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4291", "Ruds Vedby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4293", "Dianalund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4295", "Stenlille"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4296", "Nyrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4300", "Holbæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4320", "Lejre"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4330", "Hvalsø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4340", "Tølløse"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4350", "Ugerløse"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4360", "Kirke Eskilstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4370", "Store Merløse"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4390", "Vipperød"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4400", "Kalundborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4420", "Regstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4440", "Mørkøv"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4450", "Jyderup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4460", "Snertinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4470", "Svebølle"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4480", "Store Fuglede"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4490", "Jerslev Sjælland"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4500", "Nykøbing Sj"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4520", "Svinninge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4532", "Gislinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4534", "Hørve"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4540", "Fårevejle"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4550", "Asnæs"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4560", "Vig"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4571", "Grevinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4572", "Nørre Asmindrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4573", "Højby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4581", "Rørvig"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4583", "Sjællands Odde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4591", "Føllenslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4592", "Sejerø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4593", "Eskebjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4600", "Køge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4621", "Gadstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4622", "Havdrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4623", "Lille Skensved"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4632", "Bjæverskov"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4640", "Faxe"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4652", "Hårlev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4653", "Karise"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4654", "Faxe Ladeplads"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4660", "Store Heddinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4671", "Strøby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4672", "Klippinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4673", "Rødvig Stevns"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4681", "Herfølge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4682", "Tureby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4683", "Rønnede"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4684", "Holmegaard"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4690", "Haslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4700", "Næstved"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4720", "Præstø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4733", "Tappernøje"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4735", "Mern"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4736", "Karrebæksminde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4750", "Lundby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4760", "Vordingborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4771", "Kalvehave"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4772", "Langebæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4773", "Stensved"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4780", "Stege"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4791", "Borre"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4792", "Askeby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4793", "Bogø By"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4800", "Nykøbing F"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4840", "Nørre Alslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4850", "Stubbekøbing"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4862", "Guldborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4863", "Eskilstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4871", "Horbelev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4872", "Idestrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4873", "Væggerløse"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4874", "Gedser"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4880", "Nysted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4891", "Toreby L"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4892", "Kettinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4894", "Øster Ulslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4895", "Errindlev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4900", "Nakskov"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4912", "Harpelunde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4913", "Horslunde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4920", "Søllested"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4930", "Maribo"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4941", "Bandholm"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4943", "Torrig L"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4944", "Fejø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4951", "Nørreballe"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4952", "Stokkemarke"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4953", "Vesterborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4960", "Holeby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4970", "Rødby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4983", "Dannemare"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4990", "Sakskøbing"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("4992", "Midtsjælland USF P"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5000", "Odense C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5029", "Odense C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5100", "Odense C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5200", "Odense V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5210", "Odense NV"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5220", "Odense SØ"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5230", "Odense M"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5240", "Odense NØ"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5250", "Odense SV"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5260", "Odense S"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5270", "Odense N"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5290", "Marslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5300", "Kerteminde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5320", "Agedrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5330", "Munkebo"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5350", "Rynkeby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5370", "Mesinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5380", "Dalby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5390", "Martofte"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5400", "Bogense"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5450", "Otterup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5462", "Morud"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5463", "Harndrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5464", "Brenderup Fyn"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5466", "Asperup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5471", "Søndersø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5474", "Veflinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5485", "Skamby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5491", "Blommenslyst"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5492", "Vissenbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5500", "Middelfart"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5540", "Ullerslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5550", "Langeskov"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5560", "Aarup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5580", "Nørre Aaby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5591", "Gelsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5592", "Ejby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5600", "Faaborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5610", "Assens"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5620", "Glamsbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5631", "Ebberup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5642", "Millinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5672", "Broby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5683", "Haarby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5690", "Tommerup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5700", "Svendborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5750", "Ringe"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5762", "Vester Skerninge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5771", "Stenstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5772", "Kværndrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5792", "Årslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5800", "Nyborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5853", "Ørbæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5854", "Gislev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5856", "Ryslinge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5863", "Ferritslev Fyn"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5871", "Frørup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5874", "Hesselager"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5881", "Skårup Fyn"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5882", "Vejstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5883", "Oure"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5884", "Gudme"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5892", "Gudbjerg Sydfyn"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5900", "Rudkøbing"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5932", "Humble"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5935", "Bagenkop"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5953", "Tranekær"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5960", "Marstal"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5970", "Ærøskøbing"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("5985", "Søby Ærø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6000", "Kolding"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6040", "Egtved"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6051", "Almind"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6052", "Viuf"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6064", "Jordrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6070", "Christiansfeld"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6091", "Bjert"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6092", "Sønder Stenderup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6093", "Sjølund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6094", "Hejls"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6100", "Haderslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6200", "Aabenraa"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6230", "Rødekro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6240", "Løgumkloster"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6261", "Bredebro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6270", "Tønder"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6280", "Højer"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6300", "Gråsten"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6310", "Broager"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6320", "Egernsund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6330", "Padborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6340", "Kruså"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6360", "Tinglev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6372", "Bylderup-Bov"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6392", "Bolderslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6400", "Sønderborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6430", "Nordborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6440", "Augustenborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6470", "Sydals"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6500", "Vojens"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6510", "Gram"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6520", "Toftlund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6534", "Agerskov"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6535", "Branderup J"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6541", "Bevtoft"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6560", "Sommersted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6580", "Vamdrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6600", "Vejen"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6621", "Gesten"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6622", "Bække"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6623", "Vorbasse"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6630", "Rødding"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6640", "Lunderskov"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6650", "Brørup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6660", "Lintrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6670", "Holsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6682", "Hovborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6683", "Føvling"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6690", "Gørding"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6700", "Esbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6701", "Esbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6705", "Esbjerg Ø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6710", "Esbjerg V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6715", "Esbjerg N"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6720", "Fanø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6731", "Tjæreborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6740", "Bramming"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6752", "Glejbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6753", "Agerbæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6760", "Ribe"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6771", "Gredstedbro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6780", "Skærbæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6792", "Rømø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6800", "Varde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6818", "Årre"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6823", "Ansager"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6830", "Nørre Nebel"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6840", "Oksbøl"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6851", "Janderup Vestj"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6852", "Billum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6853", "Vejers Strand"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6854", "Henne"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6855", "Outrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6857", "Blåvand"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6862", "Tistrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6870", "Ølgod"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6880", "Tarm"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6893", "Hemmet"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6900", "Skjern"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6920", "Videbæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6933", "Kibæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6940", "Lem St"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6950", "Ringkøbing"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6960", "Hvide Sande"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6971", "Spjald"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6973", "Ørnhøj"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6980", "Tim"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("6990", "Ulfborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7000", "Fredericia"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7007", "Fredericia"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7017", "Taulov Pakkecenter"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7018", "Pakker TLP"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7029", "Fredericia"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7080", "Børkop"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7100", "Vejle"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7120", "Vejle Øst"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7130", "Juelsminde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7140", "Stouby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7150", "Barrit"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7160", "Tørring"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7171", "Uldum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7173", "Vonge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7182", "Bredsten"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7183", "Randbøl"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7184", "Vandel"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7190", "Billund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7200", "Grindsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7250", "Hejnsvig"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7260", "Sønder Omme"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7270", "Stakroge"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7280", "Sønder Felding"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7300", "Jelling"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7321", "Gadbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7323", "Give"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7330", "Brande"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7361", "Ejstrupholm"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7362", "Hampen"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7400", "Herning"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7429", "Herning"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7430", "Ikast"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7441", "Bording"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7442", "Engesvang"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7451", "Sunds"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7470", "Karup J"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7480", "Vildbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7490", "Aulum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7500", "Holstebro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7540", "Haderup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7550", "Sørvad"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7560", "Hjerm"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7570", "Vemb"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7600", "Struer"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7620", "Lemvig"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7650", "Bøvlingbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7660", "Bækmarksbro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7673", "Harboøre"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7680", "Thyborøn"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7700", "Thisted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7730", "Hanstholm"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7741", "Frøstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7742", "Vesløs"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7752", "Snedsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7755", "Bedsted Thy"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7760", "Hurup Thy"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7770", "Vestervig"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7790", "Thyholm"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7800", "Skive"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7830", "Vinderup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7840", "Højslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7850", "Stoholm Jyll"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7860", "Spøttrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7870", "Roslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7884", "Fur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7900", "Nykøbing M"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7950", "Erslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7960", "Karby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7970", "Redsted M"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7980", "Vils"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7990", "Øster Assels"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7992", "Sydjylland/Fyn USF P"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7993", "Sydjylland/Fyn USF B"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7996", "Fakturaservice"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7997", "Fakturascanning"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7998", "Statsservice"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("7999", "Kommunepost"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8000", "Aarhus C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8100", "Aarhus C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8200", "Aarhus N"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8210", "Aarhus V"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8220", "Brabrand"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8229", "Risskov Ø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8230", "Åbyhøj"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8240", "Risskov"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8245", "Risskov Ø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8250", "Egå"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8260", "Viby J"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8270", "Højbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8300", "Odder"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8305", "Samsø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8310", "Tranbjerg J"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8320", "Mårslet"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8330", "Beder"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8340", "Malling"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8350", "Hundslund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8355", "Solbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8361", "Hasselager"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8362", "Hørning"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8370", "Hadsten"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8380", "Trige"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8381", "Tilst"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8382", "Hinnerup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8400", "Ebeltoft"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8410", "Rønde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8420", "Knebel"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8444", "Balle"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8450", "Hammel"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8462", "Harlev J"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8464", "Galten"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8471", "Sabro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8472", "Sporup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8500", "Grenaa"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8520", "Lystrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8530", "Hjortshøj"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8541", "Skødstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8543", "Hornslet"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8544", "Mørke"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8550", "Ryomgård"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8560", "Kolind"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8570", "Trustrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8581", "Nimtofte"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8585", "Glesborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8586", "Ørum Djurs"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8592", "Anholt"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8600", "Silkeborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8620", "Kjellerup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8632", "Lemming"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8641", "Sorring"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8643", "Ans By"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8653", "Them"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8654", "Bryrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8660", "Skanderborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8670", "Låsby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8680", "Ry"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8700", "Horsens"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8721", "Daugård"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8722", "Hedensted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8723", "Løsning"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8732", "Hovedgård"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8740", "Brædstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8751", "Gedved"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8752", "Østbirk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8762", "Flemming"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8763", "Rask Mølle"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8765", "Klovborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8766", "Nørre Snede"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8781", "Stenderup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8783", "Hornsyld"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8800", "Viborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8830", "Tjele"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8831", "Løgstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8832", "Skals"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8840", "Rødkærsbro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8850", "Bjerringbro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8860", "Ulstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8870", "Langå"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8881", "Thorsø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8882", "Fårvang"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8883", "Gjern"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8900", "Randers C"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8920", "Randers NV"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8930", "Randers NØ"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8940", "Randers SV"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8950", "Ørsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8960", "Randers SØ"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8961", "Allingåbro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8963", "Auning"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8970", "Havndal"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8981", "Spentrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8983", "Gjerlev J"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("8990", "Fårup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9000", "Aalborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9029", "Aalborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9100", "Aalborg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9200", "Aalborg SV"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9210", "Aalborg SØ"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9220", "Aalborg Øst"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9230", "Svenstrup J"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9240", "Nibe"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9260", "Gistrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9270", "Klarup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9280", "Storvorde"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9293", "Kongerslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9300", "Sæby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9310", "Vodskov"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9320", "Hjallerup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9330", "Dronninglund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9340", "Asaa"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9352", "Dybvad"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9362", "Gandrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9370", "Hals"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9380", "Vestbjerg"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9381", "Sulsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9382", "Tylstrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9400", "Nørresundby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9430", "Vadum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9440", "Aabybro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9460", "Brovst"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9480", "Løkken"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9490", "Pandrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9492", "Blokhus"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9493", "Saltum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9500", "Hobro"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9510", "Arden"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9520", "Skørping"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9530", "Støvring"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9541", "Suldrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9550", "Mariager"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9560", "Hadsund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9574", "Bælum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9575", "Terndrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9600", "Aars"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9610", "Nørager"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9620", "Aalestrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9631", "Gedsted"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9632", "Møldrup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9640", "Farsø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9670", "Løgstør"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9681", "Ranum"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9690", "Fjerritslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9700", "Brønderslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9740", "Jerslev J"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9750", "Østervrå"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9760", "Vrå"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9800", "Hjørring"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9830", "Tårs"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9850", "Hirtshals"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9870", "Sindal"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9881", "Bindslev"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9900", "Frederikshavn"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9940", "Læsø"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9970", "Strandby"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9981", "Jerup"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9982", "Ålbæk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9990", "Skagen"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9992", "Jylland USF P"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9993", "Jylland USF B"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9996", "Fakturaservice"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9997", "Fakturascanning"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("9998", "Borgerservice"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("2412", "Santa Claus/Julemanden"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3900", "Nuuk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3905", "Nuussuaq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3910", "Kangerlussuaq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3911", "Sisimiut"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3912", "Maniitsoq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3913", "Tasiilaq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3915", "Kulusuk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3919", "Alluitsup Paa"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3920", "Qaqortoq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3921", "Narsaq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3922", "Nanortalik"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3923", "Narsarsuaq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3924", "Ikerasassuaq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3930", "Kangilinnguit"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3932", "Arsuk"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3940", "Paamiut"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3950", "Aasiaat"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3951", "Qasigiannguit"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3952", "Ilulissat"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3953", "Qeqertarsuaq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3955", "Kangaatsiaq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3961", "Uummannaq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3962", "Upernavik"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3964", "Qaarsut"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3970", "Pituffik"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3971", "Qaanaaq"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3972", "Station Nord"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3980", "Ittoqqortoormiit"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3982", "Mestersvig"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3984", "Danmarkshavn"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3985", "Constable Pynt"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("3992", "Slædepatrulje Sirius"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("100", "Tórshavn"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("110", "Tórshavn "));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("160", "Argir"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("165", "Argir "));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("175", "Kirkjubøur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("176", "Velbastadur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("177", "Sydradalur, Streymoy"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("178", "Nordradalur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("180", "Kaldbak"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("185", "Kaldbaksbotnur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("186", "Sund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("187", "Hvitanes"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("188", "Hoyvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("210", "Sandur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("215", "Sandur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("220", "Skálavík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("230", "Húsavík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("235", "Dalur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("236", "Skarvanes"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("240", "Skopun"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("260", "Skúvoy"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("270", "Nólsoy"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("280", "Hestur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("285", "Koltur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("286", "Stóra Dimun"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("330", "Stykkid"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("335", "Leynar"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("336", "Skællingur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("340", "Kvívík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("350", "Vestmanna"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("355", "Vestmanna"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("358", "Válur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("360", "Sandavágur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("370", "Midvágur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("375", "Midvágur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("380", "Sørvágur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("385", "Vatnsoyrar"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("386", "Bøur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("387", "Gásadalur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("388", "Mykines"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("400", "Oyrarbakki"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("405", "Oyrarbakki"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("410", "Kollafjørdur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("415", "Oyrareingir"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("416", "Signabøur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("420", "Hósvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("430", "Hvalvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("435", "Streymnes"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("436", "Saksun"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("437", "Nesvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("438", "Langasandur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("440", "Haldarsvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("445", "Tjørnuvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("450", "Oyri"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("460", "Nordskáli"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("465", "Svináir"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("466", "Ljósá"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("470", "Eidi"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("475", "Funningur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("476", "Gjógv"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("477", "Funningsfjørdur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("478", "Elduvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("480", "Skáli"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("485", "Skálafjørdur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("490", "Strendur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("494", "Innan Glyvur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("495", "Kolbanargjógv"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("496", "Morskranes"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("497", "Selatrad"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("510", "Gøta"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("511", "Gøtugjógv"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("512", "Nordragøta"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("513", "Sydrugøta"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("515", "Gøta"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("520", "Leirvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("530", "Fuglafjørdur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("535", "Fuglafjørdur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("600", "Saltangará"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("610", "Saltangará"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("620", "Runavík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("625", "Glyvrar"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("626", "Lambareidi"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("627", "Lambi"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("640", "Rituvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("645", "Æduvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("650", "Toftir"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("655", "Nes, Eysturoy"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("656", "Saltnes"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("660", "Søldarfjørdur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("665", "Skipanes"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("666", "Gøtueidi"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("690", "Oyndarfjørdur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("695", "Hellur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("700", "Klaksvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("710", "Klaksvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("725", "Nordoyri"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("726", "Ánir"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("727", "Árnafjørdur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("730", "Norddepil"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("735", "Depil"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("736", "Nordtoftir"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("737", "Múli"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("740", "Hvannasund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("750", "Vidareidi"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("765", "Svinoy"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("766", "Kirkja"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("767", "Hattarvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("780", "Kunoy"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("785", "Haraldssund"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("795", "Sydradalur, Kalsoy"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("796", "Húsar"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("797", "Mikladalur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("798", "Trøllanes"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("800", "Tvøroyri"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("810", "Tvøroyri"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("825", "Frodba"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("826", "Trongisvágur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("827", "Øravík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("850", "Hvalba"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("860", "Sandvík"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("870", "Fámjin"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("900", "Vágur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("910", "Vágur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("925", "Nes, Vágur"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("926", "Lopra"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("927", "Akrar"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("928", "Vikarbyrgi"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("950", "Porkeri"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("960", "Hov"));
+        testDataGenerateZipCodes.add(new ZipCodesTestData("970", "Sumba"));
     }
 
 }

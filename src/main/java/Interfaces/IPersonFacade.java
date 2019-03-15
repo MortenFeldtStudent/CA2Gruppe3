@@ -10,6 +10,7 @@ import entity.Address;
 import entity.CityInfo;
 import entity.Person;
 import entity.Phone;
+import exceptions.PersonNotFoundException;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public interface IPersonFacade {
     public List<String> getAllZipCodes();
     
     // Get Person By Id
-    public PersonDTO getPersonByID(int personId);
+    public PersonDTO getPersonByID(int personId) throws PersonNotFoundException;
     
     // Get all persons and information
     public List<PersonDTO> getAllPersonsAndInfo();

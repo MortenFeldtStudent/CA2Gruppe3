@@ -55,11 +55,8 @@ public class PersonResource {
     @GET
     @Path("/all/complete")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response allPersonsAndInfo() {
+    public Response allPersonsAndInfo() throws PersonNotFoundException {
         List<PersonDTO> allInfo = pf.getAllPersonsAndInfo();
-        if (allInfo == null) {
-            throw new NotFoundException("Could not find any persons.");
-        }
         return Response.ok().entity(gson.toJson(allInfo)).build();
 
     }
@@ -71,8 +68,8 @@ public class PersonResource {
         PersonDTO p = null;
         try {
             p = pf.getPersonByID(personId);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+        } catch (PersonNotFoundException ex) {
+            return Response.ok().entity(gson.toJson(ex.getMessage())).build();
         }
         return Response.ok().entity(gson.toJson(p)).build();
     }
@@ -82,10 +79,6 @@ public class PersonResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonsContactInfo() {
         List<PersonDTO> allInfo = pf.getAllPersonsContactInfo();
-        if (allInfo == null) {
-            throw new NotFoundException("Could not find any persons.");
-        }
-
         return Response.ok()
                 .entity(gson.toJson(allInfo)).build();
     }
@@ -132,8 +125,12 @@ public class PersonResource {
     @DELETE
     @Path("/delete/{id}")
     public Response deletePersonById(@PathParam("id") int id) {
+        try {
         pf.deletePersonById(id);
-        return Response.ok().build();
+        } catch (PersonNotFoundException ex) {
+            return Response.ok().entity(gson.toJson(ex.getMessage())).build();
+        }
+        return Response.ok().entity("Person with id: '" + id + "' was successfully deleted").build();
     }
 
     @POST

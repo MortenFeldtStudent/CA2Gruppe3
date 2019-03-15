@@ -75,11 +75,15 @@ public class PersonFacade implements interfaces.IPersonFacade {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p WHERE p.id = :id");
         query.setParameter("id", personId);
-        PersonDTO p = (PersonDTO) query.getSingleResult();
+        PersonDTO p = null;
+        try {
+            p = (PersonDTO) query.getSingleResult();
+        } catch (Exception ex) {
+            throw new PersonNotFoundException("Person does not exist.");
+        }
         return p;
     }
 
-    
     @Override
     public List<PersonDTO> getAllPersonsAndInfo() {
         EntityManager em = emf.createEntityManager();
@@ -117,17 +121,22 @@ public class PersonFacade implements interfaces.IPersonFacade {
         return personDTOs;
     }
 
-    public PersonDTO getSinglePersonContactInfo(int id){
+    public PersonDTO getSinglePersonContactInfo(int id) {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT (p) FROM Person p WHERE p.id = :id");
         query.setParameter("id", id);
         return (PersonDTO) query.getSingleResult();
     }
 
-
-    public void deletePersonById(int id) {
+    public void deletePersonById(int id) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
-        Person person = em.find(Person.class, id);
+        Person person = null;
+        
+        try {
+        person = (Person) em.createQuery("SELECT p FROM Person p WHERE p.id = :id").setParameter("id", id).getSingleResult();
+        } catch (Exception ex) {
+            throw new PersonNotFoundException("Person with id: " + id + " does not exist.");
+        }
         try {
             em.getTransaction().begin();
             em.remove(person);
@@ -136,14 +145,13 @@ public class PersonFacade implements interfaces.IPersonFacade {
             em.close();
         }
     }
-    
-    public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
-        PersonFacade pf = new PersonFacade(emf);
-        List<PersonDTO> persons = pf.getAllPersonsContactInfo();
-        for (PersonDTO person : persons) {
-            System.out.println(person.toStringContactInfo());
-        }
-    }
 
+//    public static void main(String[] args) {
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", null);
+//        PersonFacade pf = new PersonFacade(emf);
+//        List<PersonDTO> persons = pf.getAllPersonsContactInfo();
+//        for (PersonDTO person : persons) {
+//            System.out.println(person.toStringContactInfo());
+//        }
+//    }
 }

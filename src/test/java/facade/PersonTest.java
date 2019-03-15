@@ -11,8 +11,11 @@ import entity.CityInfo;
 import entity.Hobby;
 import entity.Person;
 import entity.Phone;
+import exceptions.PersonNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -48,7 +51,7 @@ public class PersonTest implements interfaces.IPersonTestFacade {
             em.createQuery("delete from Address").executeUpdate();
             em.createQuery("delete from CityInfo").executeUpdate();
             em.createQuery("delete from Hobby").executeUpdate();
-            // Create Test Persons entities   
+            // Create Test Persons entities
             Person person1 = new Person("oertel@gmail.com", "Jörg", "Oertel");
             Person person2 = new Person("porse@gmail.com", "Rasmus", "Porse");
             Person person3 = new Person("rojahn@gmail.com", "Nikolai", "Rojahn");
@@ -193,7 +196,10 @@ public class PersonTest implements interfaces.IPersonTestFacade {
         // Arrange
         String cityName = cityList.get(0).getCity();
         List<PersonDTO> p = facade.getAllPersonsByCity(cityName);
-        // Act
+        for (PersonDTO personDTO : p) {
+            System.out.println(personDTO);
+        }
+// Act
         String actual = cityName;
         String expected = "Lyngby";
         // Assert
@@ -232,7 +238,12 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     public void getPersonByIDTest() {
         // Arrange
         int personId = personList.get(0).getId();
-        PersonDTO personDto = facade.getPersonByID(personId);
+        PersonDTO personDto = null;
+        try {
+            personDto = facade.getPersonByID(personId);
+        } catch (PersonNotFoundException ex) {
+            Logger.getLogger(PersonTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         // Act
         int actual = personDto.getId();
         int expected = personId;
