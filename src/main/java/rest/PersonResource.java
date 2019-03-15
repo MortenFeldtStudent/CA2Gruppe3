@@ -177,6 +177,12 @@ public class PersonResource {
         return Response.ok().entity(gson.toJson(count)).build();
     }
 
+    /**
+     * Removes a person and all belonging information.
+     * 
+     * @param id Id for the person that is to be removed.
+     * @return Ok response and Id for the deleted person.
+     */
     @DELETE
     @Path("/delete/{id}")
     public Response deletePersonById(@PathParam("id") int id) {
@@ -188,6 +194,19 @@ public class PersonResource {
         return Response.ok().entity("Person with id: " + id + " was successfully deleted").build();
     }
 
+    /**
+     * Adds a person with given personal information.
+     * 
+     * @param content Data in Json format.
+     * @param phonenumber - Phone number
+     * @param pdescription - Phone description
+     * @param street - Name of street and number
+     * @param sinfo - Type of street
+     * @param zipcode - Zipcode of city
+     * @param cityname - Name of city
+     * @return Builds the information.
+     * @throws InputException - If the given information is invalid ie. letters instead of numbers.
+     */
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -212,6 +231,14 @@ public class PersonResource {
         return Response.ok().entity(gson.toJson(person)).build();
     }
 
+    /**
+     * Used to edit information on an existing person.
+     * 
+     * @param content Data in Json format
+     * @param id Person id
+     * @return The edited person object.
+     * @throws PersonNotFoundException If the given id does not correlate to an existing person, the exception is thrown.
+     */
     @PUT
     @Path("/edit/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
