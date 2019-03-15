@@ -5,6 +5,9 @@
  */
 package interfaces;
 
+import dto.PersonDTO;
+import entity.Person;
+
 
 /**
  *
@@ -38,5 +41,14 @@ public interface IPersonTestFacade {
     
     // GET id, firstName, lastName, email, addresse, phone
     public void getAllPersonsContactInfoTest();
+    
+    // GET id, firstName, lastName, email, address, phone
+    public void getSinglePersonContactInfoTest();
+    
+    // Returns error if the person does not exist. 
+    public void deletePersonByIdTest();
+    
+    // Takes firstName, lastName and email as input parameters.  
+    public void editPersonTest();
 
 }

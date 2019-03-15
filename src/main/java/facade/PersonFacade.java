@@ -124,7 +124,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
     @Override
     public PersonDTO getSinglePersonContactInfo(int id) {
         EntityManager em = emf.createEntityManager();
-        Query query = em.createQuery("SELECT (p) FROM Person p WHERE p.id = :id");
+        Query query = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p WHERE p.id = :id");
         query.setParameter("id", id);
         return (PersonDTO) query.getSingleResult();
     }
