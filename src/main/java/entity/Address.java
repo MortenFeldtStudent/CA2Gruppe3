@@ -27,7 +27,7 @@ public class Address implements Serializable {
     @Column(nullable = false)
     private String info;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "FK_City")
     private CityInfo city;
 

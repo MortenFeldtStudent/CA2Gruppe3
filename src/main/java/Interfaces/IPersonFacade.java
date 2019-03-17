@@ -20,7 +20,7 @@ import java.util.List;
 public interface IPersonFacade {
 
     //Get information about a person (address, hobbies etc) given a phone number.
-    public PersonDTO getInfoFromPersonByPhoneNumber(int phoneNumber);
+    public List<PersonDTO> getInfoFromPersonByPhoneNumber(int phoneNumber);
     
     //Get all persons with a given hobby
     public List<PersonDTO> getAllPersonsByHobby(String hobby);

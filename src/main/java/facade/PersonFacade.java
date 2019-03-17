@@ -8,6 +8,7 @@ import entity.Phone;
 import exceptions.PersonNotFoundException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -30,10 +31,10 @@ public class PersonFacade implements interfaces.IPersonFacade {
     }
 
     @Override
-    public PersonDTO getInfoFromPersonByPhoneNumber(int phoneNumber) {
+    public List<PersonDTO>getInfoFromPersonByPhoneNumber(int phoneNumber) {
         EntityManager em = emf.createEntityManager();
         Query query = em.createQuery("SELECT NEW dto.PersonDTO (p) FROM Person p JOIN p.phones ph WHERE ph.number = :phoneNumber");
-        return (PersonDTO) query.setParameter("phoneNumber", phoneNumber).getSingleResult();
+        return query.setParameter("phoneNumber", phoneNumber).getResultList();
     }
 
     @Override
@@ -171,6 +172,7 @@ public class PersonFacade implements interfaces.IPersonFacade {
         try {
          p = (Person) query.getSingleResult();
         } catch (Exception ex) {
+            System.out.println(ex.getStackTrace());
             throw new PersonNotFoundException("Person with id: " + personId + " does not exist.");
         }
         return p;

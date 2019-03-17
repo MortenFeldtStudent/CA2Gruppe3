@@ -167,10 +167,10 @@ public class PersonTest implements interfaces.IPersonTestFacade {
     @Override
     public void getInfoFromPersonByPhoneNumberTest() {
         //Arrange
-        PersonDTO p = facade.getInfoFromPersonByPhoneNumber(phoneList.get(0).getNumber());
+        List<PersonDTO> p = facade.getInfoFromPersonByPhoneNumber(phoneList.get(0).getNumber());
         //Act
         String expected = phoneList.get(0).getPerson().getEmail();
-        String actual = p.getEmail();
+        String actual = p.get(0).getEmail();
         // Assert
         Assert.assertEquals(expected.toLowerCase(), actual.toLowerCase());
 
@@ -282,7 +282,7 @@ public class PersonTest implements interfaces.IPersonTestFacade {
         //Assert
         Assert.assertEquals(expected, actual);
     }
-    
+
     @Test
     @Override
     public void getAllPersonsContactInfoTest() {
@@ -293,9 +293,9 @@ public class PersonTest implements interfaces.IPersonTestFacade {
         int expected = 4;
         //Assert
         Assert.assertEquals(expected, actual);
-        
+
     }
-    
+
     @Test
     @Override
     public void getSinglePersonContactInfoTest() {
@@ -308,32 +308,40 @@ public class PersonTest implements interfaces.IPersonTestFacade {
         //Assert
         Assert.assertEquals(expected, actual);
     }
-    
+
     @Test
     @Override
-    public void deletePersonByIdTest(){
-        //Arrange
-        int id = personList.get(0).getId();
-        facade.deletePersonById(id);
-        //Act
-        int actual = personList.size() - 1;
-        int expected = 7;
-        //Assert
-        Assert.assertEquals(expected, actual);
+    public void deletePersonByIdTest() {
+        try {
+            //Arrange
+            int id = personList.get(0).getId();
+            facade.deletePersonById(id);
+            //Act
+            int actual = personList.size() - 1;
+            int expected = 7;
+            //Assert
+            Assert.assertEquals(expected, actual);
+        } catch (PersonNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
-    
+
     @Test
     @Override
-    public void editPersonTest(){
-        //Arrange
-        int id = personList.get(0).getId();
-        Person p = facade.getPersonByIdToEdit(id);
-        p.setEmail("TEST");
-        PersonDTO personDTO = facade.editPerson(p);
-        //Act
-        String actual = personDTO.getEmail();
-        String expected = "TEST";
-        //Assert
-        Assert.assertEquals(expected, actual);
+    public void editPersonTest() {
+        try {
+            //Arrange
+            int id = personList.get(0).getId();
+            Person p = facade.getPersonByIdToEdit(id);
+            p.setEmail("TEST");
+            PersonDTO personDTO = facade.editPerson(p);
+            //Act
+            String actual = personDTO.getEmail();
+            String expected = "TEST";
+            //Assert
+            Assert.assertEquals(expected, actual);
+        } catch (PersonNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 }
