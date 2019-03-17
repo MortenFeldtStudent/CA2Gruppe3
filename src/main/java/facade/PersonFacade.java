@@ -6,13 +6,10 @@ import entity.CityInfo;
 import entity.Person;
 import entity.Phone;
 import exceptions.PersonNotFoundException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 /**

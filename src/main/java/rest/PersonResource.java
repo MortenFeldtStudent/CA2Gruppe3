@@ -89,7 +89,7 @@ public class PersonResource {
         try {
             p = pf.getPersonByID(personId);
         } catch (PersonNotFoundException ex) {
-            return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson(ex.getMessage())).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson("person with " + personId +  " does not excist!" + ex.getMessage())).build();
         }
         return Response.ok().entity(gson.toJson(p)).build();
     }
