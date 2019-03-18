@@ -251,13 +251,13 @@ public class PersonResource {
         } catch (PersonNotFoundException ex) {
             return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson(ex.getMessage())).build();
         }
-        if (!newPerson.getFirstName().isEmpty()) {
+        if (!(newPerson.getFirstName() == null)) {
             person.setFirstName(newPerson.getFirstName());
         }
-        if (!newPerson.getLastName().isEmpty()) {
+        if (!(newPerson.getLastName() == null)) {
             person.setLastName(newPerson.getLastName());
         }
-        if (!newPerson.getEmail().isEmpty()) {
+        if (!(newPerson.getEmail() == null)) {
             person.setEmail(newPerson.getEmail());
         }
         return Response.ok().entity(gson.toJson(pf.editPerson(person))).build();
