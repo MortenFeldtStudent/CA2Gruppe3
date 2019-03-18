@@ -89,7 +89,7 @@ public class PersonResource {
         try {
             p = pf.getPersonByID(personId);
         } catch (PersonNotFoundException ex) {
-            return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson("person with " + personId +  " does not excist!" + ex.getMessage())).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson("person with " + personId + " does not excist!" + ex.getMessage())).build();
         }
         return Response.ok().entity(gson.toJson(p)).build();
     }
@@ -118,7 +118,7 @@ public class PersonResource {
     @Path("/phone/{phonenumber}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonByPhoneNumber(@PathParam("phonenumber") int phone) {
-        List<PersonDTO> person =  pf.getInfoFromPersonByPhoneNumber(phone);
+        List<PersonDTO> person = pf.getInfoFromPersonByPhoneNumber(phone);
         return Response.ok().entity(gson.toJson(person)).build();
     }
 
@@ -185,12 +185,9 @@ public class PersonResource {
      */
     @DELETE
     @Path("/delete/{id}")
-    public Response deletePersonById(@PathParam("id") int id) {
-        try {
-            pf.deletePersonById(id);
-        } catch (PersonNotFoundException ex) {
-            return Response.status(Response.Status.NOT_FOUND).entity(gson.toJson(ex.getMessage())).build();
-        }
+    public Response deletePersonById(@PathParam("id") int id) throws PersonNotFoundException {
+        pf.deletePersonById(id);
+
         return Response.ok().entity(gson.toJson("Person with id: " + id + " was successfully deleted")).build();
     }
 
@@ -219,7 +216,10 @@ public class PersonResource {
             @QueryParam("sinfo") String sinfo,
             @QueryParam("zipcode") String zipcode,
             @QueryParam("city") String cityname) throws InputException {
+
         try {
+            String[] json = {content};
+            System.out.println(json);
             Phone phone = new Phone(phonenumber, pdescription);
             Address address = new Address(street, sinfo);
             CityInfo city = new CityInfo(zipcode, cityname);
