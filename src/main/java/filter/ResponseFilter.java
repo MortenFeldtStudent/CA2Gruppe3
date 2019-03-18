@@ -7,8 +7,8 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.ext.Provider;
 
-@PreMatching
 @Provider
+@PreMatching
 public class ResponseFilter implements ContainerResponseFilter {
 
     @Override
